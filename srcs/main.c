@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <fdf.h>
+# include "../includes/fdf.h"
+
 int	check_args_errors(int argc, char **argv)
 {
 	if (argc != 2)
@@ -40,25 +41,21 @@ int	init_s_fdf(char *filename, t_fdf *p_fdf)
 
 init_s_projection(t_fdf *p_fdf)
 {
-	t_projection proj;
+	t_projection_utils p_utils;
 	
-	proj = p_fdf->proj;
-	proj.map_borders = get_map_borders(p_fdf->map);//
-	proj.scale = define_scale(proj.map_borders); //
-	proj.offset = define_offset(proj.map_borders, proj.scale);
-	proj.depth = 0;
+	p_utils = p_fdf->p_utils;
+	p_utils.map_borders = get_map_borders(p_fdf->map);//
+	p_utils.scale = define_scale(p_utils.map_borders); //
+	p_utils.offset = define_offset(p_utils.map_borders, p_utils.scale);
+	p_utils.depth = 0;
 	//on se place directement en vue isometrique
-	proj.rot_x = 30;
-	proj.rot_y = -30;
-	proj.rot_z = 0;
+	p_utils.rot_x = 30;
+	p_utils.rot_y = -30;
+	p_utils.rot_z = 0;
 	
 	
 }
 
-void	frame_hook(t_fdf *p_fdf)
-{
-	
-}
 int main(int argc, char **argv)
 {
 	t_fdf	fdf;
@@ -66,6 +63,7 @@ int main(int argc, char **argv)
 	if (!check_args_errors(argc, argv) || !init_s_fdf(argv[1], &fdf))
 		return (1);
 	init_s_projection(&fdf);
-	mlx_loop_hook(fdf.mlx, frame_hook, )
+	mlx_loop_hook(fdf.mlx, frame_hooks, &fdf);
+	mlx_loop(fdf.mlx);
 	
 }

@@ -91,7 +91,7 @@ typedef struct s_projection_utils
 	double			rot_y; //verticalite = chiffe aux coordonnees [z][x]
 	double			rot_z; //profondeur = num de ligne 
 	double			depth;
-}	t_projection;
+}	t_projection_utils;
 
 // \_	fdf
 typedef struct s_fdf
@@ -100,7 +100,8 @@ typedef struct s_fdf
 	void				*win;
 	void				*img;
 	t_map_elem			**map;
-	t_projection		proj;
+	t_map_elem			**map_view;
+	t_projection_utils		p_utils;
 }	t_fdf;
 
 	// on ne met pas t_map_elem		**proj_map; pour limiter les allocations memoire
