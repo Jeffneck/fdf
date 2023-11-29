@@ -12,7 +12,7 @@ void rotation_hook(int keysym, t_fdf *p_fdf)
 {
     t_projection_utils p_utils;
 
-    p_utils = p_fdf->p_utils
+    p_utils = p_fdf->p_utils;
     //valider ce systeme de rotation
     if(keysym == XK_UP)
         p_utils.rot_x += 0.01;
@@ -27,7 +27,7 @@ void translation_hook(int keysym, t_fdf *p_fdf)
 {
     t_projection_utils p_utils;
 
-    p_utils = p_fdf->p_utils
+    p_utils = p_fdf->p_utils;
     //remplacer offset_y par offset_z ?
     if(keysym == XK_W)
         p_utils.offset_y += p_utils.scale;
@@ -42,7 +42,7 @@ void scaling_hook(int keysym, t_fdf *p_fdf)
 {
     t_projection_utils p_utils;
 
-    p_utils = p_fdf->p_utils
+    p_utils = p_fdf->p_utils;
     if(keysym == XK_ADD)
     {
         if (p_utils.scale < 1000)
@@ -58,11 +58,11 @@ void depthmodif_hook(int keysym, t_fdf *p_fdf)
 {
     t_projection_utils p_utils;
 
-    p_utils = p_fdf->p_utils
+    p_utils = p_fdf->p_utils;
     if(keysym == XK_1)
         p_utils.depth -= 0.1;
-    if(keysym == XK_1)
-        p_utils.depth -= 0.1;
+    if(keysym == XK_2)
+        p_utils.depth += 0.1;
     
 }
 
@@ -88,13 +88,5 @@ void	frame_hooks(void *param) //on pourrait mettre direct p_fdf
 	p_fdf = param;
 	mlx_hook(p_fdf->win, 17, 0, close_hook, p_fdf); //bouton fermeture fenetre
     mlx_key_hook(p_fdf->win, manage_keyhook, p_fdf);
-    render_projection(p_fdf); 
-
-
-
-	
-    
-
-
-	
+    render_projection(p_fdf); 	
 }

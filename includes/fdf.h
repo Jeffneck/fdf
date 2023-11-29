@@ -45,7 +45,7 @@ typedef struct s_map_elem
 	int				x;
 	int				y;
 	int				z;
-	int				original_depth;
+	int				depth;
 	uint32_t		color;
 	int				end;
 }	t_map_elem;
