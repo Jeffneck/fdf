@@ -66,11 +66,11 @@ typedef struct s_offset
 //	\_	line ploting
 typedef struct s_plot_utils
 {
-	int	dx;
-	int	dy;
-	int	xi;
-	int	yi;
-	int	d;
+	int	x_diff;
+	int	y_diff;
+	int	x_step;
+	int	y_step;
+	int	e; //valeur d'erreur utile dans l'algo
 }	t_plot;
 
 // \_	color
@@ -93,12 +93,28 @@ typedef struct s_projection_utils
 	double			depth;
 }	t_projection_utils;
 
+//comme on ne peut pas directement dessiner sur l'img, 
+//on obtient ses data avec mlx_get_data_adress()
+//on dessine directement dans les donnees de l'img 
+//comme on se deplace sur les pixels par octets 
+//on aura besoin de connaitre la taille des pixels et la taille des lignes en bit
+//pour dessiner aux coordonees souhaitees.
+typedef struct s_img
+{
+	void	*img; //mlx_create_img
+	//donnes obtenues grace a mlx_get_data_address();
+	void	*p_img_pixels;
+	int		bits_per_pixel;
+	int		endian;
+	int		line_len;
+}	t_img;
+
 // \_	fdf
 typedef struct s_fdf
 {
 	void				*mlx;
 	void				*win;
-	void				*img;
+	t_img				img_struct;
 	t_map_elem			**map;
 	t_map_elem			**map_view;
 	t_projection_utils		p_utils;

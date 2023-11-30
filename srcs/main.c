@@ -31,10 +31,11 @@ int	init_s_fdf(char *filename, t_fdf *p_fdf)
 	p_fdf->win = mlx_new_window(p_fdf->mlx, WIDTH, HEIGHT, "Fdf");
 	if (!p_fdf->win)
 		return (manage_errors(), 0);
-	p_fdf->img = mlx_new_image(p_fdf->mlx, WIDTH, HEIGHT);
+	p_fdf->img_struct.img = mlx_new_image(p_fdf->mlx, WIDTH, HEIGHT);
 	if (!p_fdf->img)
 		return (manage_errors(), 0);
-	if (mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->img, 0, 0) < 0)// test d' affichage image vide
+	p_fdf->img_struct.p_img_pixels = mlx_get_data_addr(p_fdf->img_struct.img, &p_fdf->img_struct.bits_per_pixel, &p_fdf->img_struct.line_len, &p_fdf->img_struct.endian)
+	if (mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->img_struct.img, 0, 0) < 0)// test d' affichage image vide ? 
 		return (manage_errors(), 0);
 	return (1);
 }
