@@ -1,4 +1,4 @@
-# include "../includes/fdf.h"
+# include "../../includes/fdf.h"
 
 int close_hook(t_fdf *p_fdf)
 {
@@ -14,13 +14,13 @@ void rotation_hook(int keysym, t_fdf *p_fdf)
 
     p_utils = p_fdf->p_utils;
     //valider ce systeme de rotation
-    if(keysym == XK_UP)
+    if(keysym == XK_KP_Up)
         p_utils.rot_x += 0.01;
-    else if(keysym == XK_DOWN)
+    else if(keysym == XK_KP_Down)
         p_utils.rot_x -= 0.01;
-    else if(keysym == XK_LEFT)
+    else if(keysym == XK_KP_Left)
         p_utils.rot_z += 0.01;
-    else if(keysym == XK_RIGHT)
+    else if(keysym == XK_KP_Right)
         p_utils.rot_z -= 0.01;
 }
 void translation_hook(int keysym, t_fdf *p_fdf)
@@ -30,25 +30,25 @@ void translation_hook(int keysym, t_fdf *p_fdf)
     p_utils = p_fdf->p_utils;
     //remplacer offset_y par offset_z ?
     if(keysym == XK_W)
-        p_utils.offset_y += p_utils.scale;
+        p_utils.offset.y += p_utils.scale;
     else if(keysym == XK_S)
-        p_utils.offset_y -= p_utils.scale;
+        p_utils.offset.y -= p_utils.scale;
     else if(keysym == XK_A)
-        p_utils.offset_x += p_utils.scale;
+        p_utils.offset.x += p_utils.scale;
     else if(keysym == XK_D)
-        p_utils.offset_x -= p_utils.scale;
+        p_utils.offset.x -= p_utils.scale;
 }
 void scaling_hook(int keysym, t_fdf *p_fdf)
 {
     t_projection_utils p_utils;
 
     p_utils = p_fdf->p_utils;
-    if(keysym == XK_ADD)
+    if(keysym == XK_KP_Add)
     {
         if (p_utils.scale < 1000)
             p_utils.scale += 1;
     }
-    else if(keysym == XK_SUBTRACT)
+    else if(keysym == XK_KP_Subtract)
     {
         if (p_utils.scale > 2)
             p_utils.scale -= 1;
@@ -70,11 +70,11 @@ int	manage_keyhook(int keysym, t_fdf *p_fdf)
 {
 	if (keysym == XK_Escape)
         close_hook(p_fdf); //exit ou return erreur ?
-	if (keysym == XK_LEFT || keysym == XK_RIGHT || keysym == XK_UP || keysym == XK_DOWN)
+	if (keysym == XK_KP_Left || keysym == XK_KP_Right || keysym == XK_KP_Up || keysym == XK_KP_Down)
 		rotation_hook(keysym, p_fdf);
 	else if (keysym == XK_W || keysym == XK_D || keysym == XK_S || keysym == XK_A)
 		translation_hook(keysym, p_fdf);
-	else if (keysym == XK_ADD || keysym == XK_SUBTRACT)
+	else if (keysym == XK_KP_Add || keysym == XK_KP_Subtract)
 		scaling_hook(keysym, p_fdf);
 	else if (keysym == XK_1 || keysym == XK_2)
 		depthmodif_hook(keysym, p_fdf);

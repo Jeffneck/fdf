@@ -3,6 +3,7 @@
 
 # include "libft.h"
 # include "../minilibx-linux/mlx.h"
+# include "../minilibx-linux/mlx_int.h" //pour les macros
 # include <fcntl.h>
 # include <math.h>
 # include <stdint.h> // retirable si on utilise les unsigned int plutot que uint32_t ?
@@ -45,7 +46,7 @@ typedef struct s_map_elem
 	int				x;
 	int				y;
 	int				z;
-	int				depth;
+	int				depth; //je ne comprend pas ce que c'est mais dans get_map => fill_map_elem c' est considere comme une copie de z (profondeur initiale)
 	uint32_t		color;
 	int				end;
 }	t_map_elem;
