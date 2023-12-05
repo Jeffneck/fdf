@@ -2,18 +2,14 @@
 
 int close_hook(t_fdf *p_fdf)
 {
-    mlx_destroy_window(p_fdf->mlx, p_fdf->win);
-    free_mapelem2(); // liberer + NULL t_map_elem
-    mlx_destroy_display(p_fdf->mlx);
-    free(p_fdf->mlx);
-    exit(1);
+    close_program(p_fdf, NULL);
 }
 void rotation_hook(int keysym, t_fdf *p_fdf)
 {
     t_projection_utils p_utils;
 
     p_utils = p_fdf->p_utils;
-    //valider ce systeme de rotation
+    //valider ce systeme de rotation + rot_y 
     if(keysym == XK_KP_Up)
         p_utils.rot_x += 0.01;
     else if(keysym == XK_KP_Down)
@@ -58,35 +54,11 @@ void depthmodif_hook(int keysym, t_fdf *p_fdf)
 {
     t_projection_utils p_utils;
 
+    //comprendre l'utilite avant de valider apply_depthmodif
     p_utils = p_fdf->p_utils;
     if(keysym == XK_1)
         p_utils.depth -= 0.1;
     if(keysym == XK_2)
         p_utils.depth += 0.1;
     
-}
-
-int	manage_keyhook(int keysym, t_fdf *p_fdf)
-{
-	if (keysym == XK_Escape)
-        close_hook(p_fdf); //exit ou return erreur ?
-	if (keysym == XK_KP_Left || keysym == XK_KP_Right || keysym == XK_KP_Up || keysym == XK_KP_Down)
-		rotation_hook(keysym, p_fdf);
-	else if (keysym == XK_W || keysym == XK_D || keysym == XK_S || keysym == XK_A)
-		translation_hook(keysym, p_fdf);
-	else if (keysym == XK_KP_Add || keysym == XK_KP_Subtract)
-		scaling_hook(keysym, p_fdf);
-	else if (keysym == XK_1 || keysym == XK_2)
-		depthmodif_hook(keysym, p_fdf);
-	return (0);
-	
-}
-void	frame_hooks(void *param) //on pourrait mettre direct p_fdf
-{
-	t_fdf *p_fdf;
-
-	p_fdf = param;
-	mlx_hook(p_fdf->win, 17, 0, close_hook, p_fdf); //bouton fermeture fenetre
-    mlx_key_hook(p_fdf->win, manage_keyhook, p_fdf);
-    render_projection(p_fdf); 	
 }

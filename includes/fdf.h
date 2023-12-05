@@ -24,21 +24,21 @@ typedef struct s_2d_vector
 	int	y;
 }	t_2d_vector;
 
-typedef struct s_3d_vector
-{
-	double		x;
-	double		y;
-	double		z;
-	uint32_t	color;
-}	t_3d_vector;
+// typedef struct s_3d_vector
+// {
+// 	double		x;
+// 	double		y;
+// 	double		z;
+// 	uint32_t	color;
+// }	t_3d_vector;
 
-// \_	matrix
-typedef struct s_3d_matrix
-{
-	t_3d_vector	i;
-	t_3d_vector	j;
-	t_3d_vector	k;
-}	t_3d_matrix;
+// // \_	matrix
+// typedef struct s_3d_matrix
+// {
+// 	t_3d_vector	i;
+// 	t_3d_vector	j;
+// 	t_3d_vector	k;
+// }	t_3d_matrix;
 
 //	\_	map
 typedef struct s_map_elem
@@ -53,16 +53,11 @@ typedef struct s_map_elem
 
 typedef struct s_map_borders
 {
-	t_2d_vector	min;
-	t_2d_vector	max;
+	int			min_x;
+	int			min_y; 
+	int			max_x;
+	int			max_y;
 }	t_map_borders;
-
-//	\_	offset
-typedef struct s_offset
-{
-	int	x;
-	int	y;
-}	t_offset;
 
 //	\_	line ploting
 typedef struct s_plot_utils
@@ -85,9 +80,10 @@ typedef struct s_color
 
 typedef struct s_projection_utils
 {
-	t_map_borders	map_borders;// utile ?
+	t_map_borders	map_borders;// mettre dans fdf ? 
 	double			scale;
-	t_offset		offset;
+	int				offset_x;
+	int				offset_y;
 	double			rot_x; //horizontalite = num de colonne
 	double			rot_y; //verticalite = chiffe aux coordonnees [z][x]
 	double			rot_z; //profondeur = num de ligne 
@@ -121,5 +117,71 @@ typedef struct s_fdf
 	t_projection_utils		p_utils;
 }	t_fdf;
 
-	// on ne met pas t_map_elem		**proj_map; pour limiter les allocations memoire
+//*****************MAIN
+int	is_error_args(int argc, char **argv);//
+int close_program(t_fdf *p_fdf, char *strerr);
+int	init_s_fdf(char *filename, t_fdf *p_fdf);//
+init_s_projection(t_fdf *p_fdf);//
+
+//*****************HOOK
+//hook_management
+int	manage_keyhook(int keysym, t_fdf *p_fdf);
+void	frame_hook(void *param);
+
+//hook_functions
+int close_hook(t_fdf *p_fdf);
+void rotation_hook(int keysym, t_fdf *p_fdf);
+void translation_hook(int keysym, t_fdf *p_fdf);
+void scaling_hook(int keysym, t_fdf *p_fdf);
+void depthmodif_hook(int keysym, t_fdf *p_fdf);
+
+//*****************RENDER_IMG
+//render_img
+void    transform_map_in_view(t_fdf *p_fdf, t_map_elem *p_view_el, t_map_elem map_el);
+void    create_view(t_fdf *p_fdf, t_map_elem **map, t_map_elem **view);
+void    put_view_in_img(t_fdf *p_fdf, t_map_elem **view);
+
+//apply_transformations
+void    apply_scaling(t_map_elem *p_view_el, t_projection_utils p_utils);
+void    apply_offset(t_map_elem *p_view_el, t_projection_utils p_utils);
+//++add apply_depthmodif
+
+//apply_rotation
+void    apply_rot_x(t_map_elem *p_view_el, double cos_a, double sin_a);
+void	apply_rot_y(t_map_elem *p_view_el, double cos_a, double sin_a);
+void	apply_rot_z(t_map_elem *p_view_el, double cos_a, double sin_a);
+void    apply_rotation(t_map_elem *p_view_el, t_projection_utils p_utils);
+
+//plot_lines_in_img
+void    put_pixel(t_img img_struct, int i, int j, uint32_t color); //
+void    plot_line_down(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1);//
+void    plot_line_up(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1);//
+void    init_ploting_utils(t_plot *plt, t_map_elem p0, t_map_elem p1);//
+void    plot_line(t_fdf *p_fdf, t_map_elem p0, t_map_elem p1);
+
+//*****************MAPS
+//map_management
+t_map_borders	get_map_borders(t_fdf *p_fdf, t_map_elem **map);
+t_map_elem **get_map(char *filename);
+
+//create_map
+char	*get_map_in_char1(int map_fd);//
+char	**get_map_in_char2(char *map_str);//
+char	***get_map_in_char3(char **map_strs);//
+t_map_elem	**fill_map_elem2(char ***map_char3, t_map_elem **map_elem2);//
+t_map_elem	**create_map_elem2(char ***map_char3);
+
+//*****************UTILS
+//length_utils
+size_t	char2len(char **char2);
+size_t	char3len(char **char3);
+
+//free_utils
+void	free_char1(char **a_char1);
+void	free_char2(char ***a_map_el2);
+void	free_char3(char ****a_char3);
+void	free_map_elem2(t_map_elem ***a_map_el2);
+
+//error_utils
+
 # endif

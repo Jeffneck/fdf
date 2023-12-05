@@ -6,13 +6,13 @@ void	free_char1(char **a_char1)
 	*a_char1 = NULL;
 }
 
-void	free_char2(char ***a_char2)
+void	free_char2(char ***a_map_el2)
 {
 	size_t	i;
 	char	**char2;
 
 	i = 0;
-	char2 = *a_char2;
+	char2 = *a_map_el2;
 	while (char2[i])
 	{
 		free(char2[i]);
@@ -21,7 +21,6 @@ void	free_char2(char ***a_char2)
 	}
 	free(char2);
 	char2 = NULL;
-
 }
 
 void	free_char3(char ****a_char3)
@@ -41,3 +40,19 @@ void	free_char3(char ****a_char3)
 	char3 = NULL;
 }
 
+void	free_map_elem2(t_map_elem ***a_map_el2)
+{
+	size_t	i;
+	t_map_elem	**map_el2;
+
+	i = 0;
+	map_el2 = *a_map_el2;
+	while (map_el2[i])
+	{
+		free(map_el2[i]);
+		map_el2[i] = NULL;
+		i++;
+	}
+	free(map_el2);
+	map_el2 = NULL;
+}

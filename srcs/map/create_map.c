@@ -1,4 +1,5 @@
 #include "../../includes/fdf.h"
+
 //1 2 3,0x.. 4 5\n
 //7 8 9 7 8 \n
 //1,0x56 3 6 3 2 \n
@@ -104,6 +105,14 @@ t_map_elem	**fill_map_elem2(char ***map_char3, t_map_elem **map_elem2)
 	return(free_char3(map_char3), map_elem2);
 }
 
+//1\2\3,0x..\4\5
+//7\8\9\7\8\6
+//1,0x56\3\6\3\2\1
+
+//char3=>map_elem2
+//map[0][0] = 1  \map[0][1] = 2\ map[0][2] = 3,0x..\ map[0][3] = 4\ map[0][4] = 5 
+// map[1][0] = 7  etc...->      \8\9\7\8\6
+//1,0x56\3\6\3\2\1
 t_map_elem	**create_map_elem2(char ***map_char3)
 {
 	size_t i;
@@ -124,28 +133,3 @@ t_map_elem	**create_map_elem2(char ***map_char3)
 	return (fill_map_elem2 (map_char3, map_elem2));
 }
 
-
-//1\2\3,0x..\4\5
-//7\8\9\7\8\6
-//1,0x56\3\6\3\2\1
-
-//char3=>map_elem2
-//map[0][0] = 1  \map[0][1] = 2\ map[0][2] = 3,0x..\ map[0][3] = 4\ map[0][4] = 5 
-// map[1][0] = 7  etc...->      \8\9\7\8\6
-//1,0x56\3\6\3\2\1
-
-t_map_elem **get_map(char *filename)
-{	
-	int			fd;
-	char		***map_char3;
-
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		return (ft_putstr_fd("Afficher un message d'erreur pour open ?\n", 2), NULL);
-	map_char3 = get_map_in_char3(get_map_in_char2(get_map_in_char1(fd)));
-	return (create_map_elem2(map_char3));
-
-}
-
-
-//astuce : toutes les allocations memoire sont faites avec calloc ce qui garantit le null terminal en 1 ligne et facilite les free. 
