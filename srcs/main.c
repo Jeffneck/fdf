@@ -26,7 +26,7 @@ int close_program(t_fdf *p_fdf, char *strerr)
 	
 	if (!p_fdf->mlx)
 		exit_error(strerr);
-	if(p_fdf->img_struct.img)
+	if(p_fdf->img_struct.img)//////////
 	{
 		mlx_destroy_image(p_fdf->mlx, p_fdf->img_struct.img); //liberer ce qui a ete obtenu par getdataaddress ? 
 		//free le reste de img ?

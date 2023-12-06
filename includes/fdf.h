@@ -98,7 +98,7 @@ typedef struct s_projection_utils
 //comme on se deplace sur les pixels par octets 
 //on aura besoin de connaitre la taille des pixels et la taille des lignes en bit
 //pour dessiner aux coordonees souhaitees.
-typedef struct s_img
+typedef struct s_imgstruct
 {
 	void	*img; //mlx_create_img
 	//donnes obtenues grace a mlx_get_data_address();
@@ -106,7 +106,7 @@ typedef struct s_img
 	int		bits_per_pixel;
 	int		endian;
 	int		line_len;
-}	t_img;
+}	t_imgstruct;
 
 // \_	fdf
 typedef struct s_fdf
@@ -123,7 +123,7 @@ typedef struct s_fdf
 int	is_error_args(int argc, char **argv);//
 int close_program(t_fdf *p_fdf, char *strerr);
 int	init_s_fdf(char *filename, t_fdf *p_fdf);//
-init_s_projection(t_fdf *p_fdf);//
+void	init_s_projection(t_fdf *p_fdf);//
 
 //*****************HOOK
 //hook_management
@@ -188,5 +188,7 @@ void	free_char3(char ****a_char3);
 void	free_map_elem2(t_map_elem ***a_map_el2);
 
 //error_utils
+int exit_error(char *strerr);
+int	is_error_filename(char	*file_name);
 
 # endif

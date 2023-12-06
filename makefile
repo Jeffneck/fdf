@@ -34,7 +34,8 @@ OBJS = 	objs/main.o\
 
 
 NAME : $(OBJS) includes/fdf.h
-	$(CC) $(FLAGS) -I includes/ -L minilibx-test/ -L libft/  -lft -lmlx-linux -lX11 -lXext $(OBJS) -o $(NAME)
+		
+#$(CC) $(FLAGS) -I includes/ -L minilibx-test/ -L libft/  -lft -lmlx-linux -lX11 -lXext $(OBJS) -o $(NAME)
 
 objs/%.o : srcs/%.c
 	mkdir -p objs

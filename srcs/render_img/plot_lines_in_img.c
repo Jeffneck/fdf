@@ -1,6 +1,6 @@
 #include "../../includes/fdf.h"
 
-void    put_pixel(t_img img_struct, size_t col, size_t line, uint32_t color)
+void    put_pixel(t_imgstruct img_struct, size_t col, size_t line, uint32_t color)
 {
     int offset;
 
