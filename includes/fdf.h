@@ -66,7 +66,7 @@ typedef struct s_plot_utils
 	int	y_diff;
 	int	x_step;
 	int	y_step;
-	int	e; //valeur d'erreur utile dans l'algo
+	int	decision; //parametre utile dans algo bresenham
 }	t_plot;
 
 // \_	color
@@ -141,6 +141,9 @@ void    transform_map_in_view(t_fdf *p_fdf, t_map_elem *p_view_el, t_map_elem ma
 void    create_view(t_fdf *p_fdf, t_map_elem **map, t_map_elem **view);
 void    put_view_in_img(t_fdf *p_fdf, t_map_elem **view);
 
+//clear_img
+void    clear_img(t_fdf *p_fdf, t_img img_struct); // envoyer t_img * ?
+
 //apply_transformations
 void    apply_scaling(t_map_elem *p_view_el, t_projection_utils p_utils);
 void    apply_offset(t_map_elem *p_view_el, t_projection_utils p_utils);
@@ -153,10 +156,10 @@ void	apply_rot_z(t_map_elem *p_view_el, double cos_a, double sin_a);
 void    apply_rotation(t_map_elem *p_view_el, t_projection_utils p_utils);
 
 //plot_lines_in_img
-void    put_pixel(t_img img_struct, int i, int j, uint32_t color); //
+void    put_pixel(t_img img_struct, int i, int j, uint32_t color); 
 void    plot_line_down(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1);//
 void    plot_line_up(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1);//
-void    init_ploting_utils(t_plot *plt, t_map_elem p0, t_map_elem p1);//
+void    init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1);//
 void    plot_line(t_fdf *p_fdf, t_map_elem p0, t_map_elem p1);
 
 //*****************MAPS

@@ -31,7 +31,7 @@ int close_program(t_fdf *p_fdf, char *strerr)
 		mlx_destroy_image(p_fdf->mlx, p_fdf->img_struct.img); //liberer ce qui a ete obtenu par getdataaddress ? 
 		//free le reste de img ?
 	}
-	if (p_fdf->win)
+	if (p_fdf->win) // une telle condition marche t elle ? 
 	{
 		mlx_destroy_window(p_fdf->mlx, p_fdf->win);
 		//free le reste de win ?
@@ -70,10 +70,10 @@ init_s_projection(t_fdf *p_fdf)
 	t_projection_utils p_utils;
 	
 	p_utils = p_fdf->p_utils;
-	p_utils = (t_projection_utils) {get_map_borders(p_fdf, p_fdf->map), 1, 0, 0, 30, -30, 0, 0}; //initialiser des parametres de projection avant ajout de rotation etc
-	create_view(p_fdf, p_fdf->map, p_fdf->map_view); //faire une premiere view
+	p_utils = (t_projection_utils) {get_map_borders(p_fdf, p_fdf->map), 1, 0, 0, 30, -30, 0, 0}; //initialiser des parametres de projection scale 1 + rotation isometrique
+	create_view(p_fdf, p_fdf->map, p_fdf->map_view); //faire une premiere 
 	//remettre a jour les parametres p_utils avec des valeurs adaptees a la vue iso creee
-	p_utils.map_borders = get_map_borders(p_fdf, p_fdf->map_view);// on recherche les bordures de la map avant projection
+	p_utils.map_borders = get_map_borders(p_fdf, p_fdf->map_view);// on recherche les bordures de la map apres la 1re projection
 	p_utils.scale =// define_scale(p_utils.map_borders); //modifier la struct dans la fonction directement
 	define_offsets(p_utils.map_borders, p_utils.scale); //refaire la fonction pour modifier directement les offset sans struct
 }

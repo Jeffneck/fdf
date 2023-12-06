@@ -1,0 +1,3 @@
+gerer toutes les fonctions qui touchent l'ancienne struct offset
+xchanger algo plot lines
+

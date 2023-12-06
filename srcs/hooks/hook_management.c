@@ -24,6 +24,7 @@ void	frame_hook(void *param) //on pourrait mettre direct p_fdf
     mlx_key_hook(p_fdf->win, manage_keyhook, p_fdf);
     create_view(p_fdf, p_fdf->map, p_fdf->map_view);
     //etape pour clear l' img precedente ou en creer une nouvelle a chaque fois ?
+	clear_img(p_fdf, p_fdf->img_struct.p_img_pixels);
     put_view_in_img(p_fdf, p_fdf->map_view); //ajouter les pixels a l'image
     mlx_put_image_to_window(p_fdf, p_fdf->win, p_fdf->img_struct.img, 0, 0); //on ajoute l' image a l'origine de la fenetre
 }
