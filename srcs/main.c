@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 15:33:53 by hanglade          #+#    #+#             */
-/*   Updated: 2023/12/05 17:23:54 by hanglade         ###   ########.fr       */
+/*   Updated: 2023/12/07 11:15:17 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 int	is_error_args(int argc, char **argv)
 {
 	if (argc != 2)
-		exit_error("Usage: ./fdf <map_path>\n", 2);
+		exit_error("Usage: ./fdf <map_path>\n");
 	if (is_error_filename(argv[1]))
-		exit_error("Invalid filename.\n", 2);
+		exit_error("Invalid filename.\n");
 	return (0);
 }
 
@@ -36,8 +36,8 @@ int close_program(t_fdf *p_fdf, char *strerr)
 		mlx_destroy_window(p_fdf->mlx, p_fdf->win);
 		//free le reste de win ?
 	}
-    free_map_elem2(p_fdf->map_view);
-    free_map_elem2(p_fdf->map); // liberer + NULL t_map_elem
+    free_map_elem2(&(p_fdf->map_view));
+    free_map_elem2(&(p_fdf->map)); // liberer + NULL t_map_elem
     mlx_destroy_display(p_fdf->mlx);
     free(p_fdf->mlx);
 	if(strerr)
@@ -65,7 +65,7 @@ int	init_s_fdf(char *filename, t_fdf *p_fdf)
 	return (1);
 }
 
-init_s_projection(t_fdf *p_fdf)
+void	init_s_projection(t_fdf *p_fdf)
 {
 	t_projection_utils p_utils;
 	
@@ -74,8 +74,9 @@ init_s_projection(t_fdf *p_fdf)
 	create_view(p_fdf, p_fdf->map, p_fdf->map_view); //faire une premiere 
 	//remettre a jour les parametres p_utils avec des valeurs adaptees a la vue iso creee
 	p_utils.map_borders = get_map_borders(p_fdf, p_fdf->map_view);// on recherche les bordures de la map apres la 1re projection
-	p_utils.scale =// define_scale(p_utils.map_borders); //modifier la struct dans la fonction directement
-	define_offsets(p_utils.map_borders, p_utils.scale); //refaire la fonction pour modifier directement les offset sans struct
+	//p_utils.scale = define_scale(p_utils.map_borders); //modifier la struct dans la fonction directement
+	define_scale(&p_utils, p_utils.map_borders);
+	define_offsets(&p_utils, p_utils.map_borders, p_utils.scale);
 }
 
 int main(int argc, char **argv)

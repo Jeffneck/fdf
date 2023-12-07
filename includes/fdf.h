@@ -2,20 +2,27 @@
 # define FDF_H
 
 # include "../libft/libft.h"
-// # include "../minilibx-linux/mlx.h"
-// # include "../minilibx-linux/mlx_int.h" //pour les macros
-# include "../minilibx-test/mlx.h" //supprimer plus tard
-# include "../minilibx-test/mlx_int.h" //supprimer plus tard
+# include "../minilibx-linux/mlx.h"
+# include "../minilibx-linux/mlx_int.h" //pour les macros
+// # include "../minilibx-test/mlx.h" //supprimer plus tard
+// # include "../minilibx-test/mlx_int.h" //supprimer plus tard
 # include <fcntl.h>
 # include <math.h>
 # include <stdint.h> // retirable si on utilise les unsigned int plutot que uint32_t ?
 
 // MACROS
-# define WIDTH 1024
-# define HEIGHT 1024
+# ifndef WIDTH
+#  define WIDTH 1024
+# endif //WIDTH
+# ifndef HEIGHT
+#  define HEIGHT 1024
+# endif //HEIGHT
+# ifndef SCALE_FACTOR 
+#  define SCALE_FACTOR 0.85
+# endif //SCALE_FACTOR
 # ifndef ENDIANESS
-#  define ENDIANESS 0 //0: little, 1: big
-# endif
+#  define ENDIANESS 0
+# endif //ENDIANESS
 
 // STRUCTURES
 //	\_	vectors
@@ -113,7 +120,7 @@ typedef struct s_fdf
 {
 	void				*mlx;
 	void				*win;
-	t_img				img_struct;
+	t_imgstruct				img_struct;
 	t_map_elem			**map;
 	t_map_elem			**map_view;
 	t_projection_utils		p_utils;
@@ -144,7 +151,7 @@ void    create_view(t_fdf *p_fdf, t_map_elem **map, t_map_elem **view);
 void    put_view_in_img(t_fdf *p_fdf, t_map_elem **view);
 
 //clear_img
-void    clear_img(t_fdf *p_fdf, t_img img_struct); // envoyer t_img * ?
+void    clear_img(t_fdf *p_fdf, t_imgstruct img_struct); // envoyer t_img * ?
 
 //apply_transformations
 void    apply_scaling(t_map_elem *p_view_el, t_projection_utils p_utils);
@@ -158,7 +165,7 @@ void	apply_rot_z(t_map_elem *p_view_el, double cos_a, double sin_a);
 void    apply_rotation(t_map_elem *p_view_el, t_projection_utils p_utils);
 
 //plot_lines_in_img
-void    put_pixel(t_img img_struct, int i, int j, uint32_t color); 
+void    put_pixel(t_imgstruct img_struct, int i, int j, uint32_t color); 
 void    plot_line_down(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1);//
 void    plot_line_up(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1);//
 void    init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1);//
@@ -166,7 +173,6 @@ void    plot_line(t_fdf *p_fdf, t_map_elem p0, t_map_elem p1);
 
 //*****************MAPS
 //map_management
-t_map_borders	get_map_borders(t_fdf *p_fdf, t_map_elem **map);
 t_map_elem **get_map(char *filename);
 
 //create_map
@@ -190,5 +196,10 @@ void	free_map_elem2(t_map_elem ***a_map_el2);
 //error_utils
 int exit_error(char *strerr);
 int	is_error_filename(char	*file_name);
+
+//projection_utils
+t_map_borders	get_map_borders(t_fdf *p_fdf, t_map_elem **map);
+void	define_scale(t_projection_utils *p_utils, t_map_borders mb);
+void	define_offsets(t_projection_utils *p_utils, t_map_borders mb, double scale);
 
 # endif

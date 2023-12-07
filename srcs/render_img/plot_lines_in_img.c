@@ -55,11 +55,10 @@ void    init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1)
         p_plt->y_step = -1;
 }
 void    plot_line(t_fdf *p_fdf, t_map_elem p0, t_map_elem p1)
-//cas d'une ligne droite?
 {
+//cas d'une ligne droite?
     t_plot plt;
 
-    plt = p_fdf->p_utils;
     init_ploting_utils(&plt, p0, p1);
     // partie qu' il faudra revoir
     if (plt.x_diff > plt.y_diff)

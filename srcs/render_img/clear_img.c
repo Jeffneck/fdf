@@ -1,11 +1,12 @@
 # include "../includes/fdf.h"
 
-void    clear_img(t_fdf *p_fdf, t_img img_struct)
+void    clear_img(t_fdf *p_fdf, t_imgstruct img_struct)
 {
     size_t  line;
     size_t  col;
+    
 
-    i = 0; 
+    line = 0; 
     while (view[line])
     {
         j = 0; 

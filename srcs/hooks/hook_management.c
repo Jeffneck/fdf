@@ -15,7 +15,7 @@ int	manage_keyhook(int keysym, t_fdf *p_fdf)
 	return (0);
 	
 }
-void	frame_hook(void *param) //on pourrait mettre direct p_fdf
+int	frame_hook(void *param) //on pourrait mettre direct p_fdf
 {
 	t_fdf *p_fdf;
 
@@ -24,7 +24,8 @@ void	frame_hook(void *param) //on pourrait mettre direct p_fdf
     mlx_key_hook(p_fdf->win, manage_keyhook, p_fdf);
     create_view(p_fdf, p_fdf->map, p_fdf->map_view);
     //etape pour clear l' img precedente ou en creer une nouvelle a chaque fois ?
-	clear_img(p_fdf, p_fdf->img_struct.p_img_pixels);
+	clear_img(p_fdf, p_fdf->img_struct);
     put_view_in_img(p_fdf, p_fdf->map_view); //ajouter les pixels a l'image
     mlx_put_image_to_window(p_fdf, p_fdf->win, p_fdf->img_struct.img, 0, 0); //on ajoute l' image a l'origine de la fenetre
+	return (1); //il n' y a pas de retour d'erreur dans cette fonction 
 }
