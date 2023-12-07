@@ -1,4 +1,4 @@
-# include "../includes/fdf.h"
+# include "../../includes/fdf.h"
 
 void    apply_rot_x(t_map_elem *p_view_el, double cos_a, double sin_a)
 {

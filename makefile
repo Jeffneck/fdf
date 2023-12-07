@@ -14,26 +14,22 @@ SRCS = 	srcs/main.c\
 		srcs/utils/error_utils.c\
 		srcs/utils/free_utils.c\
 		srcs/utils/length_utils.c\
-		srcs/utils/projection_utils.c
+		srcs/utils/projection_utils.c\
+		srcs/colors/color.c\
+		# srcs/colors/color_gradiant.c
 
 OBJS = $(patsubst srcs/%.c,objs/%.o,$(SRCS))
 #.SILENT ?
 
 $(NAME) : $(OBJS) includes/fdf.h
-	$(CC) $(FLAGS) -I includes/ -I libft/ -L minilibx-linux/ -L libft/ -lft -lmlx-linux -lX11 -lXext $(SRCS) -o $(NAME)	
-#$(CC) $(FLAGS) -I includes/ -L minilibx-linux/ -L libft/  -lft -lmlx-linux -lX11 -lXext $(OBJS) -o $(NAME)
+	make -C libft/
+	make -C minilibx-linux/
+	$(CC) $(FLAGS) $(OBJS) -g3 -I includes/ -Llibft -lft -Lminilibx-linux/ -lmlx_Linux -o $(NAME) -lX11 -lXext -lm 
+#retirer g3 en version finale
 
 objs/%.o : srcs/%.c
 	mkdir -p $(dir $@)
 	$(CC) $(FLAGS) -c $< -o $@
-
-# objs/%.o : srcs/%.c
-# 	mkdir -p objs
-# 	mkdir -p objs/hooks
-# 	mkdir -p objs/map
-# 	mkdir -p objs/render_img
-# 	mkdir -p objs/utils
-# 	$(CC) $(FLAGS) -c $< -o $@
 
 all : $(NAME)
 

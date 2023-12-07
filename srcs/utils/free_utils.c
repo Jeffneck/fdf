@@ -32,7 +32,7 @@ void	free_char3(char ****a_char3)
 	char3 = *a_char3;
 	while (char3[i])
 	{
-		free_char2(char3[i]);
+		free_char2(&char3[i]);
 		char3[i] = NULL;
 		i++;
 	}

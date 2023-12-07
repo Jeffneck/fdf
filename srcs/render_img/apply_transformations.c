@@ -1,4 +1,4 @@
-# include "../includes/fdf.h"
+# include "../../includes/fdf.h"
 
 void    apply_scaling(t_map_elem *p_view_el, t_projection_utils p_utils)
 {

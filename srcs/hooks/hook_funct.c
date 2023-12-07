@@ -3,6 +3,7 @@
 int close_hook(t_fdf *p_fdf)
 {
     close_program(p_fdf, NULL);
+    return(1);
 }
 void rotation_hook(int keysym, t_fdf *p_fdf)
 {
@@ -26,13 +27,13 @@ void translation_hook(int keysym, t_fdf *p_fdf)
     p_utils = p_fdf->p_utils;
     //remplacer offset_y par offset_z ?
     if(keysym == XK_W)
-        p_utils.offset.y += p_utils.scale;
+        p_utils.offset_y += p_utils.scale;
     else if(keysym == XK_S)
-        p_utils.offset.y -= p_utils.scale;
+        p_utils.offset_y -= p_utils.scale;
     else if(keysym == XK_A)
-        p_utils.offset.x += p_utils.scale;
+        p_utils.offset_x += p_utils.scale;
     else if(keysym == XK_D)
-        p_utils.offset.x -= p_utils.scale;
+        p_utils.offset_x -= p_utils.scale;
 }
 void scaling_hook(int keysym, t_fdf *p_fdf)
 {

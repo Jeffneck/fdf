@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 15:33:53 by hanglade          #+#    #+#             */
-/*   Updated: 2023/12/07 11:15:17 by hanglade         ###   ########.fr       */
+/*   Updated: 2023/12/07 17:21:50 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	is_error_args(int argc, char **argv)
 {
+	ft_printf("main : is_error_args\n");//
 	if (argc != 2)
 		exit_error("Usage: ./fdf <map_path>\n");
 	if (is_error_filename(argv[1]))
@@ -23,6 +24,7 @@ int	is_error_args(int argc, char **argv)
 
 int close_program(t_fdf *p_fdf, char *strerr)
 {
+	ft_printf("main : close_program\n");//
 	
 	if (!p_fdf->mlx)
 		exit_error(strerr);
@@ -47,9 +49,11 @@ int close_program(t_fdf *p_fdf, char *strerr)
 
 int	init_s_fdf(char *filename, t_fdf *p_fdf)
 {
-	p_fdf->map = get_map(filename);//
+	ft_printf("main : init_s_fdf\n");//
+	p_fdf->map = get_map(filename);
 	if (!p_fdf->map)
 		close_program(p_fdf, "Error : get_map()");
+	p_fdf->map_view = get_map(filename);//view est cree de la meme maniere que get map pour le 1er appel (il serait possible de faire un genre de memdup ou calloc de la bonne taille ?)
 	p_fdf->mlx = mlx_init();
 	if (!p_fdf->mlx)
 		close_program(p_fdf, "Error : mlx_init()");
@@ -60,29 +64,33 @@ int	init_s_fdf(char *filename, t_fdf *p_fdf)
 	if (!p_fdf->img_struct.img)
 		close_program(p_fdf, "Error : mlx_new_image()");
 	p_fdf->img_struct.p_img_pixels = mlx_get_data_addr(p_fdf->img_struct.img, &p_fdf->img_struct.bits_per_pixel, &p_fdf->img_struct.line_len, &p_fdf->img_struct.endian);
-	if (mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->img_struct.img, 0, 0) < 0)// test d' affichage image vide ? 
-		close_program(p_fdf, "Error : mlx_put_image_to_window()");
+	// if (mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->img_struct.img, 0, 0) < 0)// test d' affichage image vide ? //code a garder
+	// 	close_program(p_fdf, "Error : mlx_put_image_to_window()");
 	return (1);
 }
 
 void	init_s_projection(t_fdf *p_fdf)
 {
-	t_projection_utils p_utils;
+	ft_printf("main : init_s_projection\n");//
+	t_projection_utils *p_utils;
 	
-	p_utils = p_fdf->p_utils;
-	p_utils = (t_projection_utils) {get_map_borders(p_fdf, p_fdf->map), 1, 0, 0, 30, -30, 0, 0}; //initialiser des parametres de projection scale 1 + rotation isometrique
-	create_view(p_fdf, p_fdf->map, p_fdf->map_view); //faire une premiere 
+	p_utils = &(p_fdf->p_utils);
+	*p_utils = (t_projection_utils) {get_map_borders(p_fdf->map), 1, 0, 0, 30, -30, 0, 0}; //initialiser des parametres de projection scale 1 + rotation isometrique
+	//create_view(p_fdf, p_fdf->map, p_fdf->map_view); //faire une premiere vue avec sans la mise a l'echelle et offset 
 	//remettre a jour les parametres p_utils avec des valeurs adaptees a la vue iso creee
-	p_utils.map_borders = get_map_borders(p_fdf, p_fdf->map_view);// on recherche les bordures de la map apres la 1re projection
+	
+	p_utils->map_borders = get_map_borders(p_fdf->map);// test, la ligne du dessous est la bonne
+	//p_utils->map_borders = get_map_borders(p_fdf->map_view);// on recherche les bordures de la map apres la 1re projection
 	//p_utils.scale = define_scale(p_utils.map_borders); //modifier la struct dans la fonction directement
-	define_scale(&p_utils, p_utils.map_borders);
-	define_offsets(&p_utils, p_utils.map_borders, p_utils.scale);
+	define_scale(p_utils, p_utils->map_borders);
+	define_offsets(p_utils, p_utils->map_borders, p_utils->scale);
 }
 
 int main(int argc, char **argv)
 {
 	t_fdf	fdf;
 	
+	//fdf = (t_fdf) {0, 0, 0, 0, 0, 0}; //inutile ?
 	is_error_args(argc, argv);
 	init_s_fdf(argv[1], &fdf);
 	init_s_projection(&fdf);

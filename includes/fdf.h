@@ -12,10 +12,10 @@
 
 // MACROS
 # ifndef WIDTH
-#  define WIDTH 1024
+#  define WIDTH 100
 # endif //WIDTH
 # ifndef HEIGHT
-#  define HEIGHT 1024
+#  define HEIGHT 100
 # endif //HEIGHT
 # ifndef SCALE_FACTOR 
 #  define SCALE_FACTOR 0.85
@@ -126,6 +126,10 @@ typedef struct s_fdf
 	t_projection_utils		p_utils;
 }	t_fdf;
 
+//*****************COLORS
+//color.c
+int	strhexa_to_colorint(char *strhexa);
+
 //*****************MAIN
 int	is_error_args(int argc, char **argv);//
 int close_program(t_fdf *p_fdf, char *strerr);
@@ -135,7 +139,7 @@ void	init_s_projection(t_fdf *p_fdf);//
 //*****************HOOK
 //hook_management
 int	manage_keyhook(int keysym, t_fdf *p_fdf);
-void	frame_hook(void *param);
+int	frame_hook(void *param);
 
 //hook_functions
 int close_hook(t_fdf *p_fdf);
@@ -151,7 +155,7 @@ void    create_view(t_fdf *p_fdf, t_map_elem **map, t_map_elem **view);
 void    put_view_in_img(t_fdf *p_fdf, t_map_elem **view);
 
 //clear_img
-void    clear_img(t_fdf *p_fdf, t_imgstruct img_struct); // envoyer t_img * ?
+void    clear_img(t_imgstruct img_struct);
 
 //apply_transformations
 void    apply_scaling(t_map_elem *p_view_el, t_projection_utils p_utils);
@@ -165,7 +169,7 @@ void	apply_rot_z(t_map_elem *p_view_el, double cos_a, double sin_a);
 void    apply_rotation(t_map_elem *p_view_el, t_projection_utils p_utils);
 
 //plot_lines_in_img
-void    put_pixel(t_imgstruct img_struct, int i, int j, uint32_t color); 
+void    put_pixel(t_imgstruct img_struct, size_t col, size_t line, uint32_t color); 
 void    plot_line_down(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1);//
 void    plot_line_up(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1);//
 void    init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1);//
@@ -185,7 +189,7 @@ t_map_elem	**create_map_elem2(char ***map_char3);
 //*****************UTILS
 //length_utils
 size_t	char2len(char **char2);
-size_t	char3len(char **char3);
+size_t	char3len(char ***char3);
 
 //free_utils
 void	free_char1(char **a_char1);
@@ -198,7 +202,7 @@ int exit_error(char *strerr);
 int	is_error_filename(char	*file_name);
 
 //projection_utils
-t_map_borders	get_map_borders(t_fdf *p_fdf, t_map_elem **map);
+t_map_borders	get_map_borders(t_map_elem **map);
 void	define_scale(t_projection_utils *p_utils, t_map_borders mb);
 void	define_offsets(t_projection_utils *p_utils, t_map_borders mb, double scale);
 

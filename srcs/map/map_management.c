@@ -7,7 +7,7 @@ t_map_elem **get_map(char *filename)
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-		return (ft_putstr_fd("Afficher un message d'erreur pour open ?\n", 2), NULL);
+		return (ft_printf("open a echoue, avec filename = %s\n", filename), NULL);//revoir la gestion d'erreur
 	map_char3 = get_map_in_char3(get_map_in_char2(get_map_in_char1(fd)));
 	return (create_map_elem2(map_char3));
 

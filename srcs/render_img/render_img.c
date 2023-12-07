@@ -1,17 +1,16 @@
-# include "../includes/fdf.h"
+# include "../../includes/fdf.h"
 
 void    transform_map_in_view(t_fdf *p_fdf, t_map_elem *p_view_el, t_map_elem map_el)
 {
+	ft_printf("render_img : transform_map_in_view\n");//
     t_projection_utils p_utils;
-    t_map_elem view_el;
 
     p_utils = p_fdf->p_utils;
-    view_el = *p_view_el;
-    view_el = (t_map_elem) {map_el.x, map_el.y, map_el.z,
+    *p_view_el = (t_map_elem) {map_el.x, map_el.y, map_el.z,
         map_el.depth, map_el.color, map_el.end};
     if (p_utils.scale == 1)
         apply_scaling(p_view_el, p_utils);
-    if (p_utils.offset.x != 0 || p_utils.offset.y != 0)
+    if (p_utils.offset_x != 0 || p_utils.offset_y != 0)
         apply_offset(p_view_el, p_utils);
     // if (p_utils.depth)
     //     apply_depthmodif(p_view_el, p_utils);
@@ -20,6 +19,7 @@ void    transform_map_in_view(t_fdf *p_fdf, t_map_elem *p_view_el, t_map_elem ma
 
 void    create_view(t_fdf *p_fdf, t_map_elem **map, t_map_elem **view)
 {
+	ft_printf("render_img : create_view\n");//
     size_t  i; 
     size_t  j;
 
@@ -29,6 +29,7 @@ void    create_view(t_fdf *p_fdf, t_map_elem **map, t_map_elem **view)
         j = 0;
         while (map[i][j].end != 1)
         {
+            //ft_printf("before transform map in view : coor line = %d col = %d\n", i, j);//
             transform_map_in_view(p_fdf, &view[i][j], map[i][j]);
             j++;
         }
@@ -39,6 +40,7 @@ void    create_view(t_fdf *p_fdf, t_map_elem **map, t_map_elem **view)
 void    put_view_in_img(t_fdf *p_fdf, t_map_elem **view)
 {
     //on utilise les int car l'img s_img de mlx a des size_line .. en int ?
+	ft_printf("put_view_in_img : create_view\n");//
     int i; 
     int j;
 

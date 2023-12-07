@@ -1,3 +1,4 @@
 gerer toutes les fonctions qui touchent l'ancienne struct offset
 xchanger algo plot lines
+mise a l echelle de z differente de scale?
 

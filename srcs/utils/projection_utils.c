@@ -20,8 +20,9 @@
 // 	return (void *)a;
 // }
 
-t_map_borders	get_map_borders(t_fdf *p_fdf, t_map_elem **map)
+t_map_borders	get_map_borders(t_map_elem **map)
 {
+	ft_printf("utils : projection_utils\n");//
 	size_t			i; 
 	size_t			j;
 	t_map_borders	borders;
@@ -50,6 +51,7 @@ t_map_borders	get_map_borders(t_fdf *p_fdf, t_map_elem **map)
 
 void	define_scale(t_projection_utils *p_utils, t_map_borders mb) 
 {
+	ft_printf("utils : define_scale\n");//
 	double scale_x;
 	double scale_y;
 
@@ -64,6 +66,7 @@ void	define_scale(t_projection_utils *p_utils, t_map_borders mb)
 
 void	define_offsets(t_projection_utils *p_utils, t_map_borders mb, double scale)
 {
+	ft_printf("utils : define_offsets\n");//
 	p_utils->offset_x = round((WIDTH - scale * (mb.max_x - mb.min_x)) / 2);
 	p_utils->offset_y = round((HEIGHT - scale * (mb.max_y - mb.min_y)) / 2);
 	if(mb.min_x < 0)
