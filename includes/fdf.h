@@ -12,7 +12,7 @@
 
 // MACROS
 # ifndef WIDTH
-#  define WIDTH 2000
+#  define WIDTH 
 # endif //WIDTH
 # ifndef HEIGHT
 #  define HEIGHT 2000
