@@ -12,13 +12,13 @@
 
 // MACROS
 # ifndef WIDTH
-#  define WIDTH 100
+#  define WIDTH 2000
 # endif //WIDTH
 # ifndef HEIGHT
-#  define HEIGHT 100
+#  define HEIGHT 2000
 # endif //HEIGHT
 # ifndef SCALE_FACTOR 
-#  define SCALE_FACTOR 0.85
+#  define SCALE_FACTOR 0.85 //remplacer par 0.85
 # endif //SCALE_FACTOR
 # ifndef ENDIANESS
 #  define ENDIANESS 0
@@ -95,7 +95,7 @@ typedef struct s_projection_utils
 	int				offset_y;
 	double			rot_x; //horizontalite = num de colonne
 	double			rot_y; //verticalite = chiffe aux coordonnees [z][x]
-	double			rot_z; //profondeur = num de ligne 
+	double			rot_z; //profondeur
 	double			depth;
 }	t_projection_utils;
 
@@ -160,7 +160,7 @@ void    clear_img(t_imgstruct img_struct);
 //apply_transformations
 void    apply_scaling(t_map_elem *p_view_el, t_projection_utils p_utils);
 void    apply_offset(t_map_elem *p_view_el, t_projection_utils p_utils);
-//++add apply_depthmodif
+void    apply_depthmodif(t_map_elem *p_view_el, t_projection_utils p_utils);
 
 //apply_rotation
 void    apply_rot_x(t_map_elem *p_view_el, double cos_a, double sin_a);
@@ -169,7 +169,7 @@ void	apply_rot_z(t_map_elem *p_view_el, double cos_a, double sin_a);
 void    apply_rotation(t_map_elem *p_view_el, t_projection_utils p_utils);
 
 //plot_lines_in_img
-void    put_pixel(t_imgstruct img_struct, size_t col, size_t line, uint32_t color); 
+void    put_pixel(t_imgstruct img_struct, int col, int line, uint32_t color); 
 void    plot_line_down(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1);//
 void    plot_line_up(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1);//
 void    init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1);//

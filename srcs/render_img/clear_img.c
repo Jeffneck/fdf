@@ -11,7 +11,7 @@ void    clear_img(t_imgstruct img_struct)
         col = 0; 
         while (col < WIDTH)
         {
-            put_pixel(img_struct, col, line, 0);
+            put_pixel(img_struct, col, line, 0); //mettre 0  pour noir
             col++;
         }
         line++;

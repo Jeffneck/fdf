@@ -2,24 +2,23 @@
 
 void    transform_map_in_view(t_fdf *p_fdf, t_map_elem *p_view_el, t_map_elem map_el)
 {
-	ft_printf("render_img : transform_map_in_view\n");//
+	// printf("render_img : transform_map_in_view scale = %f offsetx = %d offsety = %d\n", p_fdf->p_utils.scale, p_fdf->p_utils.offset_x, p_fdf->p_utils.offset_y);//
     t_projection_utils p_utils;
 
     p_utils = p_fdf->p_utils;
     *p_view_el = (t_map_elem) {map_el.x, map_el.y, map_el.z,
         map_el.depth, map_el.color, map_el.end};
-    if (p_utils.scale == 1)
+    if (p_utils.scale != 1) //modifie pdt tests
         apply_scaling(p_view_el, p_utils);
     if (p_utils.offset_x != 0 || p_utils.offset_y != 0)
         apply_offset(p_view_el, p_utils);
-    // if (p_utils.depth)
-    //     apply_depthmodif(p_view_el, p_utils);
-    apply_rotation(p_view_el, p_utils);
+    apply_depthmodif(p_view_el, p_utils);
+    apply_rotation(p_view_el, p_utils);// a garder
 }
 
 void    create_view(t_fdf *p_fdf, t_map_elem **map, t_map_elem **view)
 {
-	ft_printf("render_img : create_view\n");//
+	// ft_printf("render_img : create_view\n");//
     size_t  i; 
     size_t  j;
 
@@ -40,7 +39,7 @@ void    create_view(t_fdf *p_fdf, t_map_elem **map, t_map_elem **view)
 void    put_view_in_img(t_fdf *p_fdf, t_map_elem **view)
 {
     //on utilise les int car l'img s_img de mlx a des size_line .. en int ?
-	ft_printf("put_view_in_img : create_view\n");//
+	// ft_printf("put_view_in_img : create_view\n");//
     int i; 
     int j;
 

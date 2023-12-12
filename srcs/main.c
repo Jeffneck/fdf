@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 15:33:53 by hanglade          #+#    #+#             */
-/*   Updated: 2023/12/07 17:21:50 by hanglade         ###   ########.fr       */
+/*   Updated: 2023/12/08 16:43:43 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,18 @@ void	init_s_projection(t_fdf *p_fdf)
 	t_projection_utils *p_utils;
 	
 	p_utils = &(p_fdf->p_utils);
-	*p_utils = (t_projection_utils) {get_map_borders(p_fdf->map), 1, 0, 0, 30, -30, 0, 0}; //initialiser des parametres de projection scale 1 + rotation isometrique
-	//create_view(p_fdf, p_fdf->map, p_fdf->map_view); //faire une premiere vue avec sans la mise a l'echelle et offset 
+	*p_utils = (t_projection_utils) {get_map_borders(p_fdf->map), 1, 0, 0, 0.52, 0, 0, 0}; //initialiser des parametres de projection scale 1 + rotation isometrique 0, 30, -30
 	//remettre a jour les parametres p_utils avec des valeurs adaptees a la vue iso creee
 	
-	p_utils->map_borders = get_map_borders(p_fdf->map);// test, la ligne du dessous est la bonne
-	//p_utils->map_borders = get_map_borders(p_fdf->map_view);// on recherche les bordures de la map apres la 1re projection
+	//p_utils->map_borders = get_map_borders(p_fdf->map);// test, la ligne du dessous est la bonne
 	//p_utils.scale = define_scale(p_utils.map_borders); //modifier la struct dans la fonction directement
+	create_view(p_fdf, p_fdf->map, p_fdf->map_view); //faire une premiere vue avec sans la mise a l'echelle et offset 
+	p_utils->map_borders = get_map_borders(p_fdf->map_view);// on recherche les bordures de la map apres la 1re projection
 	define_scale(p_utils, p_utils->map_borders);
+	// create_view(p_fdf, p_fdf->map, p_fdf->map_view); //faire une premiere vue avec sans la mise a l'echelle et offset 
+	//p_utils->map_borders = get_map_borders(p_fdf->map_view);// on recherche les bordures de la map apres la 1re projection
 	define_offsets(p_utils, p_utils->map_borders, p_utils->scale);
+	create_view(p_fdf, p_fdf->map, p_fdf->map_view); //faire une premiere vue avec sans la mise a l'echelle et offset 
 }
 
 int main(int argc, char **argv)
@@ -94,7 +97,10 @@ int main(int argc, char **argv)
 	is_error_args(argc, argv);
 	init_s_fdf(argv[1], &fdf);
 	init_s_projection(&fdf);
-	mlx_loop_hook(fdf.mlx, frame_hook, &fdf);
+	// mlx_key_hook(fdf.win, manage_keyhook, &fdf);// test
+	//mlx_key_hook(fdf.win, close_hook, &fdf); //test
+	mlx_hook(fdf.win, 2, 1L<<0, manage_keyhook, &fdf);
+	//mlx_loop_hook(fdf.mlx, frame_hook, &fdf); // vraie version 
 	mlx_loop(fdf.mlx);
 	return (close_program(&fdf, NULL));
 }

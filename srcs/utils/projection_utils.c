@@ -22,7 +22,6 @@
 
 t_map_borders	get_map_borders(t_map_elem **map)
 {
-	ft_printf("utils : projection_utils\n");//
 	size_t			i; 
 	size_t			j;
 	t_map_borders	borders;
@@ -46,12 +45,13 @@ t_map_borders	get_map_borders(t_map_elem **map)
 		}
 		i++;
 	}
+	printf(" projection_utils : get map border => min x = %d max x = %d min y = %d max y = %d\n", borders.min_x, borders.max_x, borders.min_y, borders.max_y);//
 	return (borders);
 }
 
 void	define_scale(t_projection_utils *p_utils, t_map_borders mb) 
 {
-	ft_printf("utils : define_scale\n");//
+	printf("utils : define_scale => scale init = %f\n", p_utils->scale );//
 	double scale_x;
 	double scale_y;
 
@@ -62,15 +62,24 @@ void	define_scale(t_projection_utils *p_utils, t_map_borders mb)
 	else
 		p_utils->scale = scale_y;
 	// p_utils->scale = *((double *)(min_bytewise(&scale_x, &scale_y, sizeof(double)))); // meme chose mais plus complexe
+	printf("utils : define_scale => scale final = %f and min x = %f max x = %f min y = %f max y = %f\n", p_utils->scale, mb.min_x * p_utils->scale, mb.max_x * p_utils->scale, mb.min_y * p_utils->scale, mb.max_y * p_utils->scale);//
+
 }
 
 void	define_offsets(t_projection_utils *p_utils, t_map_borders mb, double scale)
 {
-	ft_printf("utils : define_offsets\n");//
-	p_utils->offset_x = round((WIDTH - scale * (mb.max_x - mb.min_x)) / 2);
-	p_utils->offset_y = round((HEIGHT - scale * (mb.max_y - mb.min_y)) / 2);
+	
+	//scale = 6.4; //RETIRER ABSOLUMENT
+	p_utils->offset_x = round((WIDTH - (scale * abs(mb.max_x - mb.min_x))) / 2);
+	p_utils->offset_y = round((HEIGHT - (scale * abs(mb.max_y - mb.min_y))) / 2);
 	if(mb.min_x < 0)
-		p_utils->offset_x += (- mb.min_x);
+		p_utils->offset_x += abs((int)(round(mb.min_x) * scale)); // juste (- mb.min_x a l' air de marcher)
 	if(mb.min_y < 0)
-		p_utils->offset_y += (- mb.min_y);
+	{
+		p_utils->offset_y += abs((int)(round(mb.min_y) * scale));
+	}
+	printf("utils : define_offsets => scale received = %f width map = %f, height map = %f = offset x = %d offset y = %d\n", (float)round(scale), (float)round(scale * abs(mb.max_x - mb.min_x)), (float)round(6.4 * abs(mb.max_y - mb.min_y)), p_utils->offset_x, p_utils->offset_y);//
+	ft_printf(" after scale offset min x = %d  max x = %d min y = %d max_y = %d", (int)(p_utils->offset_x + scale * mb.min_x), (int)(p_utils->offset_x + scale * mb.max_x), (int)(p_utils->offset_y + scale * mb.min_y), (int)(p_utils->offset_y + scale * mb.max_y)); 
+	printf("aaaaa");
+	//scale = scale + 0; // pour eviter message erreur
 }
