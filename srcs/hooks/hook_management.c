@@ -13,24 +13,34 @@ int	manage_keyhook(int keysym, t_fdf *p_fdf)
 		scaling_hook(keysym, p_fdf);
 	else if (keysym == XK_1 || keysym == XK_2)
 		depthmodif_hook(keysym, p_fdf);
-	frame_hook(p_fdf); //test
+	// frame_hook(p_fdf); //test
 	return (1);
 	
 }
-int	frame_hook(void *param) //on pourrait mettre direct p_fdf
+void	init_imgstruct(t_fdf *p_fdf, int action)
+{
+	t_imgstruct *img;
+
+	if (action = 1)
+		img = &(p_fdf->s_img);
+	else
+		img = &(p_fdf->s_nxt_img);
+	img->img = mlx_new_image(p_fdf->mlx, WIDTH, HEIGHT); 
+	if (!img)
+		close_program(p_fdf, "Error : mlx_new_image()");//bien fermer la seconde image lors de close
+	img->p_img_pixels = mlx_get_data_addr(img->img, &(img->bits_per_pixel), &(img->line_len), &(img->endian));
+}
+
+int	frame_hook(t_fdf *p_fdf) //on pourrait mettre direct p_fdf
 {
 	ft_printf("hooks : frame_hook\n");
-	t_fdf *p_fdf;
 
-	p_fdf = param;
-    mlx_hook(p_fdf->win, 17, 0, close_hook, p_fdf); //bouton fermeture fenetre
-    //mlx_hook(p_fdf->win, 2, 1L<<0, manage_keyhook, p_fdf);
-	//mlx_key_hook(p_fdf->win, manage_keyhook, p_fdf);
-    create_view(p_fdf, p_fdf->map, p_fdf->map_view);
-    //etape pour clear l' img precedente ou en creer une nouvelle a chaque fois ?
-	clear_img(p_fdf->img_struct);
-    put_view_in_img(p_fdf, p_fdf->map_view); //ajouter les pixels a l'image
-    ft_printf("hooks : frame_hook before image put window\n");
+    if (ft_memcmp(&(p_fdf->proj), &(p_fdf->proj.last_proj), sizeof(t_proj)) == 0);
+        return (0);
+	init_imgstruct(p_fdf, 2);
+    put_view_in_img(p_fdf, p_fdf->s_nxt_img, p_fdf->map);
+	ft_memove( &(p_fdf->proj), &(p_fdf->proj), sizeof(t_proj)); //attention a la last proj est contenu dans proj
+    //ft_printf("hooks : frame_hook before image put window\n");
 	mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->img_struct.img, 0, 0); //on ajoute l' image a l'origine de la fenetre
-	return (1); //il n' y a pas de retour d'erreur dans cette fonction 
+	return (1);
 }

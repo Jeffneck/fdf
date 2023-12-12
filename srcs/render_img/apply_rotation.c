@@ -66,13 +66,25 @@ void apply_rot_z(t_map_elem *p_view_el, double cos_a, double sin_a)
 //     p_view_el->y = (old_x * (-sin_a) + old_y * cos_a) + HEIGHT / 2;
 // }
 
-void    apply_rotation(t_map_elem *p_view_el, t_projection_utils p_utils)
+center_or_decenter_map_el(t_map_data md, t_proj last_proj, t_map_elem *p_map_el, int action)
+{
+    if (action == 1)
+    {
+        p_map_el->x -= (md.width / 2 + last_proj.offset_x);
+        p_map_el->y -= (md.height / 2 + last_proj.offset_y);
+    }
+    else
+    {
+        p_map_el->x += (md.width / 2 + last_proj.offset_x);
+        p_map_el->y += (md.height / 2 + last_proj.offset_y);
+    }
+
+}
+
+void    apply_rotation(t_map_elem *p_view_el, t_proj proj)
 {
     //avant test les conditions etaient du type if (p_view_el->y)
-    if (p_utils.rot_x != 0.0)
-        apply_rot_x(p_view_el, (double)cos(p_utils.rot_x), (double)sin(p_utils.rot_x));
-    if (p_utils.rot_y != 0.0) 
-        apply_rot_y(p_view_el, (double)cos(p_utils.rot_y), (double)sin(p_utils.rot_y));
-    if (p_utils.rot_z != 0.0)
-        apply_rot_z(p_view_el, (double)cos(p_utils.rot_z), (double)sin(p_utils.rot_z));
+    apply_rot_x(p_view_el, (double)cos(proj.rot_x), (double)sin(proj.rot_x));
+    apply_rot_y(p_view_el, (double)cos(proj.rot_y), (double)sin(proj.rot_y));
+    apply_rot_z(p_view_el, (double)cos(proj.rot_z), (double)sin(proj.rot_z));
 }

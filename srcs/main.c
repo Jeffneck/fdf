@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 15:33:53 by hanglade          #+#    #+#             */
-/*   Updated: 2023/12/08 16:43:43 by hanglade         ###   ########.fr       */
+/*   Updated: 2023/12/12 17:55:21 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int close_program(t_fdf *p_fdf, char *strerr)
 		mlx_destroy_window(p_fdf->mlx, p_fdf->win);
 		//free le reste de win ?
 	}
-    free_map_elem2(&(p_fdf->map_view));
+    //free_map_elem2(&(p_fdf->map_view));
     free_map_elem2(&(p_fdf->map)); // liberer + NULL t_map_elem
     mlx_destroy_display(p_fdf->mlx);
     free(p_fdf->mlx);
@@ -53,7 +53,9 @@ int	init_s_fdf(char *filename, t_fdf *p_fdf)
 	p_fdf->map = get_map(filename);
 	if (!p_fdf->map)
 		close_program(p_fdf, "Error : get_map()");
-	p_fdf->map_view = get_map(filename);//view est cree de la meme maniere que get map pour le 1er appel (il serait possible de faire un genre de memdup ou calloc de la bonne taille ?)
+	p_fdf->map_data = 
+	p_fdf->map_borders = get_map_borders(p_fdf->map)
+	//p_fdf->map_view = get_map(filename);//view est cree de la meme maniere que get map pour le 1er appel (il serait possible de faire un genre de memdup ou calloc de la bonne taille ?)
 	p_fdf->mlx = mlx_init();
 	if (!p_fdf->mlx)
 		close_program(p_fdf, "Error : mlx_init()");
@@ -69,24 +71,21 @@ int	init_s_fdf(char *filename, t_fdf *p_fdf)
 	return (1);
 }
 
-void	init_s_projection(t_fdf *p_fdf)
+void	init_projection(t_fdf *p_fdf, t_proj* p_proj)
 {
-	ft_printf("main : init_s_projection\n");//
-	t_projection_utils *p_utils;
+	//ft_printf("main : init_s_projection\n");//
 	
-	p_utils = &(p_fdf->p_utils);
-	*p_utils = (t_projection_utils) {get_map_borders(p_fdf->map), 1, 0, 0, 0.52, 0, 0, 0}; //initialiser des parametres de projection scale 1 + rotation isometrique 0, 30, -30
-	//remettre a jour les parametres p_utils avec des valeurs adaptees a la vue iso creee
-	
-	//p_utils->map_borders = get_map_borders(p_fdf->map);// test, la ligne du dessous est la bonne
-	//p_utils.scale = define_scale(p_utils.map_borders); //modifier la struct dans la fonction directement
-	create_view(p_fdf, p_fdf->map, p_fdf->map_view); //faire une premiere vue avec sans la mise a l'echelle et offset 
-	p_utils->map_borders = get_map_borders(p_fdf->map_view);// on recherche les bordures de la map apres la 1re projection
-	define_scale(p_utils, p_utils->map_borders);
+	if (p_fdf->map_data.width <= WIDTH || p_fdf->map_data.height <= HEIGHT)
+		close_program(p_fdf, "Error : window too small");
+	define_scale(p_proj, p_fdf->map_data);
 	// create_view(p_fdf, p_fdf->map, p_fdf->map_view); //faire une premiere vue avec sans la mise a l'echelle et offset 
-	//p_utils->map_borders = get_map_borders(p_fdf->map_view);// on recherche les bordures de la map apres la 1re projection
-	define_offsets(p_utils, p_utils->map_borders, p_utils->scale);
-	create_view(p_fdf, p_fdf->map, p_fdf->map_view); //faire une premiere vue avec sans la mise a l'echelle et offset 
+	//p_proj->map_borders = get_map_borders(p_fdf->map_view);// on recherche les bordures de la map apres la 1re projection
+	define_offsets(p_proj, p_fdf->map_data, p_proj->scale);
+	p_proj->rot_x = 0;//verifier les valeurs de rot
+	p_proj->rot_y = 0.79; 
+	p_proj->rot_z = 0.79;
+	p_proj->depthfactor = 1;
+	create_projection(p_fdf, p_fdf->map);
 }
 
 int main(int argc, char **argv)
@@ -96,11 +95,11 @@ int main(int argc, char **argv)
 	//fdf = (t_fdf) {0, 0, 0, 0, 0, 0}; //inutile ?
 	is_error_args(argc, argv);
 	init_s_fdf(argv[1], &fdf);
-	init_s_projection(&fdf);
-	// mlx_key_hook(fdf.win, manage_keyhook, &fdf);// test
-	//mlx_key_hook(fdf.win, close_hook, &fdf); //test
+	init_s_projection(&fdf, &(fdf.proj));
+	 // on peut l' utiliser pour reset
+    mlx_hook(fdf.win, 17, 0, close_hook, &fdf); //bouton fermeture fenetre
 	mlx_hook(fdf.win, 2, 1L<<0, manage_keyhook, &fdf);
-	//mlx_loop_hook(fdf.mlx, frame_hook, &fdf); // vraie version 
+	mlx_loop_hook(fdf.mlx, frame_hook, &fdf); // vraie version 
 	mlx_loop(fdf.mlx);
 	return (close_program(&fdf, NULL));
 }

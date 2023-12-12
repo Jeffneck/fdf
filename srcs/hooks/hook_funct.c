@@ -62,7 +62,7 @@ void depthmodif_hook(int keysym, t_fdf *p_fdf)
 
     p_utils = &(p_fdf->p_utils);
     if(keysym == XK_1)
-        p_utils->depth -= 0.1;
+        p_utils->depthfactor -= 0.1;
     if(keysym == XK_2)
-        p_utils->depth += 0.1;
+        p_utils->depthfactor += 0.1;
 }

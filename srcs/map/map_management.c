@@ -1,6 +1,6 @@
 #include "../../includes/fdf.h"
 
-t_map_elem **get_map(char *filename)
+t_map_elem **get_map(t_fdf *fdf char *filename)
 {	
 	int			fd;
 	char		***map_char3;

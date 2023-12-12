@@ -10,7 +10,7 @@ void    put_pixel(t_imgstruct img_struct, int col, int line, uint32_t color)
         *((uint32_t *)(img_struct.p_img_pixels + offset)) = color; 
 }
 
-void    plot_low_slope(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1)
+void    plot_low_slope(t_imgstruct *current_img, t_plot plt, t_map_elem p0, t_map_elem p1)
 {
 	// ft_printf("plot_lines in img : plot_low_slope\n");//
     while (p0.x != p1.x)//erreur dans la condition ? 
@@ -19,7 +19,7 @@ void    plot_low_slope(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1)
         if (p0.x >= 0 && p0.x < WIDTH && p0.y >= 0 && p0.y < HEIGHT) 
         {
             //mlx_pixel_put(p_fdf->mlx, p_fdf->win, p0.x, p0.y, 2000000000); //utilise uniquement pour tester (trace directement sur fenetre et pas sur img!)
-            put_pixel(p_fdf->img_struct, p0.x, p0.y, p0.color); //vraie commande a garder
+            put_pixel(current_img, p0.x, p0.y, p0.color); //vraie commande a garder
         }
         p0.x += plt.x_step;
         if (plt.decision <= 0)
@@ -32,7 +32,7 @@ void    plot_low_slope(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1)
     }
 }
 
-void    plot_high_slope(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1)
+void    plot_high_slope(t_imgstruct *current_img, t_plot plt, t_map_elem p0, t_map_elem p1)
 {
 	// ft_printf("plot_lines in img : plot_high_slope\n");//
     while (p0.y != p1.y) // <= ne marche pas si on fait -1 
@@ -41,7 +41,8 @@ void    plot_high_slope(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1)
         if (p0.x >= 0 && p0.x < WIDTH && p0.y >= 0 && p0.y < HEIGHT) //mettre ca dans put pixel
         {
             //mlx_pixel_put(p_fdf->mlx, p_fdf->win, p0.x, p0.y, 2000000000); //utilise uniquement pour tester (trace directement sur fenetre et pas sur img!)
-            put_pixel(p_fdf->img_struct, p0.x, p0.y, p0.color); //vraie commande a garder
+            //vraie commande a garder
+            put_pixel(*current_img, p0.x, p0.y, p0.color);
         }
         p0.y += plt.y_step;
         if (plt.decision <= 0)
@@ -69,10 +70,10 @@ void    init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1)
     else
         p_plt->y_step = -1;
 }
-void    plot_line(t_fdf *p_fdf, t_map_elem p0, t_map_elem p1)
+void    plot_line(t_imgstruct current_img, t_map_elem p0, t_map_elem p1)
 {
 //cas d'une ligne droite?
-	//ft_printf("plot_lines in img : plot_line\n");//
+	//ft_printf("plot_lines in current_img : plot_line\n");//
     t_plot plt;
 
     init_ploting_utils(&plt, p0, p1);
@@ -80,12 +81,12 @@ void    plot_line(t_fdf *p_fdf, t_map_elem p0, t_map_elem p1)
     if (plt.x_diff > plt.y_diff)
     {
         plt.decision = 2 * plt.y_diff - plt.x_diff;
-        plot_low_slope(p_fdf, plt, p0, p1);
+        plot_low_slope(current_img, plt, p0, p1);
     }
     else
     {
         plt.decision = 2 * plt.x_diff - plt.y_diff;
-        plot_high_slope(p_fdf, plt, p0, p1);   
+        plot_high_slope(current_img, plt, p0, p1);   
     }
     //mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->img_struct.img, 0, 0); // test a retirer plus tard !!
     //sleep(1); //pour voir ce qu' il se passe

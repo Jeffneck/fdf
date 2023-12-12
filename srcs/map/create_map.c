@@ -95,11 +95,10 @@ t_map_elem	**fill_map_elem2(char ***map_char3, t_map_elem **map_elem2)
 			if (!el_split)
 				return (free_char3(&map_char3), free_map_elem2(&map_elem2), NULL);
 			map_elem2[i][j] = (t_map_elem) {j, i, ft_atoi(el_split[0]),
-				ft_atoi(el_split[0]), strhexa_to_colorint(el_split[1]), 0};
+				ft_atoi(el_split[0]), strhexa_to_colorint(el_split[1]), 1};
 			free_char2(&el_split);
 			j++;
 		}
-		map_elem2[i][j] = (t_map_elem){0, 0, 0, 0, 0, 1}; //equivaut a map_elem2.end = 1 => detection de fin de ligne
 		i++;
 	}
 	return(free_char3(&map_char3), map_elem2);
