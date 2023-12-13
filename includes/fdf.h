@@ -76,7 +76,7 @@ typedef struct s_plot_utils
 	int	y_diff;
 	int	x_step;
 	int	y_step;
-	int	decision; //parametre utile dans algo bresenham
+	int	decision;
 }	t_plot;
 
 // \_	color
@@ -103,10 +103,10 @@ typedef struct s_proj
 	double			scale;
 	int				offset_x;
 	int				offset_y;
-	double			rot_x; //horizontalite = num de colonne
-	double			rot_y; //verticalite = chiffe aux coordonnees [z][x]
-	double			rot_z; //profondeur
-	double			depthfactor;//mettre a l' echelle z sans modifier x et y => pratique en fonction du niveau de zoom
+	double			rot_x;
+	double			rot_y;
+	double			rot_z;
+	double			depthfactor;
 }	t_proj;
 
 typedef struct s_projs
@@ -115,21 +115,14 @@ typedef struct s_projs
 	t_proj	*last;
 }	t_projs;
 
-//comme on ne peut pas directement dessiner sur l'img, 
-//on obtient ses data avec mlx_get_data_adress()
-//on dessine directement dans les donnees de l'img 
-//comme on se deplace sur les pixels par octets 
-//on aura besoin de connaitre la taille des pixels et la taille des lignes en bit
-//pour dessiner aux coordonees souhaitees.
+
 typedef struct s_imgstruct
 {
-	void	*img_mlx; //mlx_create_img
-	//donnes obtenues grace a mlx_get_data_address();
+	void	*img_mlx; 
 	void	*p_img_pixels;
 	int		bits_per_pixel;
 	int		endian;
 	int		line_len;
-	int		valid;
 }	t_imgstruct;
 
 // \_	fdf
@@ -152,7 +145,7 @@ int		strhexa_to_colorint(char *strhexa);
 int		is_error_args(int argc, char **argv);//
 t_imgstruct	*init_new_img(t_fdf *p_fdf);
 int		init_s_fdf(char *filename, t_fdf *p_fdf);//
-void	init_s_projection(t_fdf *p_fdf, t_proj* p_proj);
+void	init_s_projections(t_fdf *p_fdf, t_projs* projs);
 
 //*****************HOOK
 //hook_management

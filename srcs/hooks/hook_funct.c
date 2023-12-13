@@ -11,7 +11,7 @@ void rotation_hook(int keysym, t_fdf *p_fdf)
     ft_printf("hook_func : rotation_hook\n");
     t_proj *proj;
 
-    proj = &(p_fdf->projs.current);
+    proj = p_fdf->projs.current;
     //valider ce systeme de rotation + rot_y 
     if(keysym == XK_Up)
         proj->rot_x += 0.01;
@@ -27,7 +27,7 @@ void translation_hook(int keysym, t_fdf *p_fdf)
     printf("hook_func : translation_hook\n");
     t_proj *proj;
 
-    proj = &(p_fdf->projs.current);
+    proj = p_fdf->projs.current;
     if(keysym == XK_w)
         proj->offset_y += proj->scale;
     else if(keysym == XK_s)
@@ -42,7 +42,7 @@ void scaling_hook(int keysym, t_fdf *p_fdf)
     ft_printf("hook_func : scaling_hook\n");
     t_proj *proj;
 
-    proj = &(p_fdf->projs.current);
+    proj = p_fdf->projs.current;
     if(keysym == XK_KP_Add)
     {
         if (proj->scale < 1000)
@@ -59,7 +59,7 @@ void depthmodif_hook(int keysym, t_fdf *p_fdf)
     ft_printf("hook_func : depthmodif_hook\n");
     t_proj *proj;
 
-    proj = &(p_fdf->projs.current);
+    proj = p_fdf->projs.current;
     if(keysym == XK_1)
         proj->depthfactor -= 0.1;
     if(keysym == XK_2)
