@@ -9,60 +9,59 @@ int close_hook(t_fdf *p_fdf)
 void rotation_hook(int keysym, t_fdf *p_fdf)
 {
     ft_printf("hook_func : rotation_hook\n");
-    t_projection_utils *p_utils;
+    t_proj *proj;
 
-    p_utils = &(p_fdf->p_utils);
+    proj = &(p_fdf->projs.current);
     //valider ce systeme de rotation + rot_y 
     if(keysym == XK_Up)
-        p_utils->rot_x += 0.01;
+        proj->rot_x += 0.01;
     else if(keysym == XK_Down)
-        p_utils->rot_x -= 0.01;
+        proj->rot_x -= 0.01;
     else if(keysym == XK_Left)
-        p_utils->rot_y += 0.01;
+        proj->rot_y += 0.01;
     else if(keysym == XK_Right)
-        p_utils->rot_y -= 0.01;
+        proj->rot_y -= 0.01;
 }
 void translation_hook(int keysym, t_fdf *p_fdf)
 {
     printf("hook_func : translation_hook\n");
-    t_projection_utils *p_utils;
+    t_proj *proj;
 
-    p_utils = &(p_fdf->p_utils);
-    //remplacer offset_y par offset_z ?
+    proj = &(p_fdf->projs.current);
     if(keysym == XK_w)
-        p_utils->offset_y += p_utils->scale;
+        proj->offset_y += proj->scale;
     else if(keysym == XK_s)
-        p_utils->offset_y -= p_utils->scale;
+        proj->offset_y -= proj->scale;
     else if(keysym == XK_a)
-        p_utils->offset_x += p_utils->scale;
+        proj->offset_x += proj->scale;
     else if(keysym == XK_d)
-        p_utils->offset_x -= p_utils->scale;
+        proj->offset_x -= proj->scale;
 }
 void scaling_hook(int keysym, t_fdf *p_fdf)
 {
     ft_printf("hook_func : scaling_hook\n");
-    t_projection_utils *p_utils;
+    t_proj *proj;
 
-    p_utils = &(p_fdf->p_utils);
+    proj = &(p_fdf->projs.current);
     if(keysym == XK_KP_Add)
     {
-        if (p_utils->scale < 1000)
-            p_utils->scale += 1;
+        if (proj->scale < 1000)
+            proj->scale += 1;
     }
     else if(keysym == XK_KP_Subtract)
     {
-        if (p_utils->scale > 2)
-            p_utils->scale -= 1;
+        if (proj->scale > 2)
+            proj->scale -= 1;
     }
 }
 void depthmodif_hook(int keysym, t_fdf *p_fdf)
 {
     ft_printf("hook_func : depthmodif_hook\n");
-    t_projection_utils *p_utils;
+    t_proj *proj;
 
-    p_utils = &(p_fdf->p_utils);
+    proj = &(p_fdf->projs.current);
     if(keysym == XK_1)
-        p_utils->depthfactor -= 0.1;
+        proj->depthfactor -= 0.1;
     if(keysym == XK_2)
-        p_utils->depthfactor += 0.1;
+        proj->depthfactor += 0.1;
 }

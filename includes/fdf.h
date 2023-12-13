@@ -92,11 +92,14 @@ typedef struct s_map_data
 {
 	int	width;
 	int	height;
+	t_map_borders		borders; 
 }	t_map_data;
+
+
 
 typedef struct s_proj
 {
-	t_map_borders	proj_borders;
+	t_map_borders	proj_borders; //
 	double			scale;
 	int				offset_x;
 	int				offset_y;
@@ -104,8 +107,13 @@ typedef struct s_proj
 	double			rot_y; //verticalite = chiffe aux coordonnees [z][x]
 	double			rot_z; //profondeur
 	double			depthfactor;//mettre a l' echelle z sans modifier x et y => pratique en fonction du niveau de zoom
-	struct s_proj	last_proj;
 }	t_proj;
+
+typedef struct s_projs
+{
+	t_proj	*current;
+	t_proj	*last;
+}	t_projs;
 
 //comme on ne peut pas directement dessiner sur l'img, 
 //on obtient ses data avec mlx_get_data_adress()
@@ -115,13 +123,13 @@ typedef struct s_proj
 //pour dessiner aux coordonees souhaitees.
 typedef struct s_imgstruct
 {
-	void	*img; //mlx_create_img
-	void	*next_img; //image de la frame suivante
+	void	*img_mlx; //mlx_create_img
 	//donnes obtenues grace a mlx_get_data_address();
 	void	*p_img_pixels;
 	int		bits_per_pixel;
 	int		endian;
 	int		line_len;
+	int		valid;
 }	t_imgstruct;
 
 // \_	fdf
@@ -129,12 +137,11 @@ typedef struct s_fdf
 {
 	void				*mlx;
 	void				*win;
-	t_imgstruct			s_img;
-	t_imgstruct			s_nxt_img;
+	t_imgstruct			*s_imgtoclean;
+	t_imgstruct			*s_new_img;
 	t_map_elem			**map;
 	t_map_data			map_data;
-	t_map_borders		map_borders; 
-	t_proj				proj;
+	t_projs				projs;
 }	t_fdf;
 
 //*****************COLORS
@@ -143,14 +150,14 @@ int		strhexa_to_colorint(char *strhexa);
 
 //*****************MAIN
 int		is_error_args(int argc, char **argv);//
-int 	close_program(t_fdf *p_fdf, char *strerr);
+t_imgstruct	*init_new_img(t_fdf *p_fdf);
 int		init_s_fdf(char *filename, t_fdf *p_fdf);//
 void	init_s_projection(t_fdf *p_fdf, t_proj* p_proj);
 
 //*****************HOOK
 //hook_management
 int		manage_keyhook(int keysym, t_fdf *p_fdf);
-int		frame_hook(void *param);
+int		frame_hook(t_fdf *p_fdf);
 
 //hook_functions
 int		close_hook(t_fdf *p_fdf);
@@ -161,12 +168,9 @@ void	depthmodif_hook(int keysym, t_fdf *p_fdf);
 
 //*****************RENDER_IMG
 //render_img
-void	transform_coor_in_proj_coor(t_proj proj, t_proj *last_proj, t_map_elem *p_map_el);
-void	create_projection(t_fdf *p_fdf, t_map_elem **map);
-void	put_view_in_img(t_fdf *p_fdf, t_map_elem **view);
-
-//clear_img
-void	clear_img(t_imgstruct img_struct);
+void    transform_coor_in_proj_coor(t_fdf *p_fdf, t_map_elem *p_map_el);
+//void	create_projection(t_fdf *p_fdf, t_map_elem **map);
+void    put_view_in_img(t_fdf *p_fdf, t_imgstruct *p_img, t_map_elem **map); 
 
 //apply_transformations
 void	apply_scaling(t_map_elem *p_map_el, t_proj proj);
@@ -180,11 +184,11 @@ void	apply_rot_z(t_map_elem *p_view_el, double cos_a, double sin_a);
 void	apply_rotation(t_map_elem *p_view_el, t_proj proj);
 
 //plot_lines_in_img
-void	put_pixel(t_imgstruct img_struct, int col, int line, uint32_t color); 
-void	plot_line_down(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1);//
-void	plot_line_up(t_fdf *p_fdf, t_plot plt, t_map_elem p0, t_map_elem p1);//
-void	init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1);//
-void	plot_line(t_fdf *p_fdf, t_map_elem p0, t_map_elem p1);
+void    put_pixel(t_imgstruct *p_img, int col, int line, int color); 
+void    plot_low_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem p1);
+void    plot_high_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem p1);
+void    init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1);
+void    plot_line(t_imgstruct *p_img, t_map_elem p0, t_map_elem p1);
 
 //*****************MAPS
 //map_management
@@ -213,8 +217,13 @@ int exit_error(char *strerr);
 int	is_error_filename(char	*file_name);
 
 //projection_utils
-t_map_borders	get_map_borders(t_map_elem **map);
+t_map_data	get_map_data(t_map_elem **map);
 void	define_scale(t_proj *p_proj, t_map_data md);
 void	define_offsets(t_proj *p_proj, t_map_data mb, double scale);
+
+//closing_utils
+int		close_program(t_fdf *p_fdf, char *strerr);
+void	clean_close_imgstruct(t_fdf *p_fdf, t_imgstruct *p_imgtoclear);
+void	clean_close_window(t_fdf *p_fdf, void *p_win);
 
 # endif
