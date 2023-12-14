@@ -2,7 +2,7 @@
 
 void    put_pixel(t_imgstruct *p_img, int col, int line, int color) //il faut surement envoyer *p_img 
 {
-	//ft_printf("plot_lines in img : put_pixel x = %d y = %d\n", col, line);//
+	ft_printf("plot_lines in img : put_pixel x = %d y = %d\n", col, line);//
     int offset;
 
     offset = (p_img->line_len * line) + (p_img->bits_per_pixel * col / 8);
@@ -12,7 +12,7 @@ void    put_pixel(t_imgstruct *p_img, int col, int line, int color) //il faut su
 
 void    plot_low_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem p1)
 {
-	// ft_printf("plot_lines in img : plot_low_slope\n");//
+	ft_printf("plot_lines in img : plot_low_slope\n");//
     while (p0.x != p1.x)//erreur dans la condition ? 
     {
 	    // ft_printf("want to put pixel in x = %d y = %d color = %d\n", p0.x, p0.y, p0.color);//
@@ -31,7 +31,7 @@ void    plot_low_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem
 
 void    plot_high_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem p1)
 {
-	// ft_printf("plot_lines in img : plot_high_slope\n");//
+	ft_printf("plot_lines in img : plot_high_slope\n");//
     while (p0.y != p1.y) // <= ne marche pas si on fait -1 
     {
 	    // ft_printf("want to put pixel in x = %d y = %d color = %d\n", p0.x, p0.y, p0.color);//
@@ -66,7 +66,7 @@ void    init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1)
 void    plot_line(t_imgstruct *p_img, t_map_elem p0, t_map_elem p1)
 {
 //cas d'une ligne droite?
-	//ft_printf("plot_lines in p_img : plot_line\n");//
+	// ft_printf("plot_lines in p_img : plot_line\n");//
     t_plot plt;
 
     init_ploting_utils(&plt, p0, p1);

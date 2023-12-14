@@ -92,6 +92,8 @@ typedef struct s_map_data
 {
 	int	width;
 	int	height;
+	int	center_x;
+	int	center_y;
 	t_map_borders		borders; 
 }	t_map_data;
 
@@ -111,8 +113,8 @@ typedef struct s_proj
 
 typedef struct s_projs
 {
-	t_proj	*current;
-	t_proj	*last;
+	t_proj	current;
+	t_proj	last;
 }	t_projs;
 
 
@@ -130,8 +132,8 @@ typedef struct s_fdf
 {
 	void				*mlx;
 	void				*win;
-	t_imgstruct			*s_imgtoclean;
-	t_imgstruct			*s_new_img;
+	t_imgstruct			s_img_to_del;//retirer le pointeur ??
+	t_imgstruct			s_new_img;
 	t_map_elem			**map;
 	t_map_data			map_data;
 	t_projs				projs;
@@ -171,8 +173,8 @@ void	apply_offset(t_map_elem *p_map_el, t_proj proj);
 void	apply_depthmodif(t_map_elem *p_map_el, t_proj proj);
 
 //apply_rotation
-void	apply_rot_x(t_map_elem *p_view_el, double cos_a, double sin_a);
-void	apply_rot_y(t_map_elem *p_view_el, double cos_a, double sin_a);
+void    apply_rot_x(t_map_elem *p_map_el, double cos_a, double sin_a, t_proj proj);
+void	apply_rot_y(t_map_elem *p_map_el, double cos_a, double sin_a, t_proj proj);
 void	apply_rot_z(t_map_elem *p_view_el, double cos_a, double sin_a);
 void	apply_rotation(t_map_elem *p_view_el, t_proj proj);
 
@@ -184,15 +186,19 @@ void    init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1);
 void    plot_line(t_imgstruct *p_img, t_map_elem p0, t_map_elem p1);
 
 //*****************MAPS
-//map_management
+//get_map
+t_map_elem	**fill_map_elem2(char ***map_char3, t_map_elem **map_elem2);//penser a terminer chaque ligne par un NULL
+t_map_elem	**create_map_elem2(char ***map_char3);
 t_map_elem **get_map(char *filename);
 
-//create_map
+//center_map
+void    center_map(t_map_data md, t_map_elem **map);
+
+//file_to_charmap
 char	*get_map_in_char1(int map_fd);//
 char	**get_map_in_char2(char *map_str);//
 char	***get_map_in_char3(char **map_strs);//
-t_map_elem	**fill_map_elem2(char ***map_char3, t_map_elem **map_elem2);//penser a terminer chaque ligne par un NULL
-t_map_elem	**create_map_elem2(char ***map_char3);
+
 
 //*****************UTILS
 //length_utils

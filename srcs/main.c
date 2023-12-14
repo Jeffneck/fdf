@@ -39,20 +39,20 @@ t_imgstruct	*init_new_img(t_fdf *p_fdf)
 
 void	init_s_projections(t_fdf *p_fdf, t_projs* projs)
 {
-	//ft_printf("main : init_s_projection\n");//
+	ft_printf("main : init_s_projection\n");//
 	
-	projs->last = NULL; //utile ?
-	if (p_fdf->map_data.width <= WIDTH || p_fdf->map_data.height <= HEIGHT)
+	//projs->last = NULL; //deja mis a 0 car fdf le contenait
+	if (p_fdf->map_data.width >= WIDTH || p_fdf->map_data.height >= HEIGHT)
 		close_program(p_fdf, "Error : window too small");
-	define_scale(projs->current, p_fdf->map_data);
-	//create_view(p_fdf, p_fdf->map, p_fdf->map_view); //faire une premiere vue avec sans la mise a l'echelle et offset 
-	//current->map_borders = get_map_borders(p_fdf->map_view);// on recherche les bordures de la map apres la 1re projection
-	define_offsets(projs->current, p_fdf->map_data, projs->current->scale);
-	projs->current->rot_x = 0;//verifier les valeurs de rot
-	projs->current->rot_y = 0.79; 
-	projs->current->rot_z = 0.79;
-	projs->current->depthfactor = 1;
-	//create_projection(p_fdf, p_fdf->map);
+	ft_printf("main : init_s_projection\n");//
+	define_scale(&(projs->current), p_fdf->map_data);
+	ft_printf("main : init_s_projection\n");//
+	define_offsets(&(projs->current), p_fdf->map_data, projs->current.scale);
+	projs->current.rot_x = 0;//verifier les valeurs de rot
+	projs->current.rot_y = 0.79; 
+	projs->current.rot_z = 0.79;
+	projs->current.depthfactor = 1;
+	ft_printf("main : init_s_projection\n");//
 }
 
 int	init_s_fdf(char *filename, t_fdf *p_fdf)
@@ -62,16 +62,15 @@ int	init_s_fdf(char *filename, t_fdf *p_fdf)
 	if (!p_fdf->map)
 		close_program(p_fdf, "Error : get_map()");
 	p_fdf->map_data = get_map_data(p_fdf->map);
-	//p_fdf->map_borders = get_map_borders(p_fdf->map);
-	//p_fdf->map_view = get_map(filename);//view est cree de la meme maniere que get map pour le 1er appel (il serait possible de faire un genre de memdup ou calloc de la bonne taille ?)
+	center_map(p_fdf->map_data, p_fdf->map);
 	p_fdf->mlx = mlx_init();
 	if (!p_fdf->mlx)
 		close_program(p_fdf, "Error : mlx_init()");
 	p_fdf->win = mlx_new_window(p_fdf->mlx, WIDTH, HEIGHT, "Fdf");
 	if (!p_fdf->win)
 		close_program(p_fdf, "Error : mlx_new_window()");
-	p_fdf->s_new_img = init_new_img(p_fdf);
-	if (mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->s_new_img->img_mlx, 0, 0) < 0)// test d' affichage image vide ?
+	p_fdf->s_new_img = *init_new_img(p_fdf);
+	if (mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->s_new_img.img_mlx, 0, 0) < 0)// test d' affichage image vide ?
 		close_program(p_fdf, "Error : mlx_put_image_to_window()");
 	init_s_projections(p_fdf, &(p_fdf->projs));
 	return (1);
@@ -80,16 +79,18 @@ int	init_s_fdf(char *filename, t_fdf *p_fdf)
 int main(int argc, char **argv)
 {
 	t_fdf	fdf;
+
+	ft_memset(&fdf, 0, sizeof(fdf));
 	
-	fdf = (t_fdf){
-    .mlx = NULL, // Initialisez mlx avec la valeur appropriée
-    .win = NULL, // Initialisez win avec la valeur appropriée
-    .s_imgtoclean = NULL, // Initialisez s_imgtoclean avec la valeur appropriée
-    .s_new_img = NULL, // Initialisez s_new_img avec la valeur appropriée
-    .map = NULL, // Initialisez map avec la valeur appropriée
-    .map_data = {0, 0, {0, 0, 0, 0}}, // Initialisez map_data avec les valeurs appropriées
-    .projs = {NULL, NULL}, // Initialisez projs avec les valeurs appropriées
-	};
+	// fdf = (t_fdf){
+    // .mlx = NULL, // Initialisez mlx avec la valeur appropriée
+    // .win = NULL, // Initialisez win avec la valeur appropriée
+    // .s_img_to_del = NULL, // Initialisez s_imgtoclean avec la valeur appropriée
+    // .s_new_img = NULL, // Initialisez s_new_img avec la valeur appropriée
+    // .map = NULL, // Initialisez map avec la valeur appropriée
+    // .map_data = {0, 0, 0, 0, {0, 0, 0, 0}}, // Initialisez map_data avec les valeurs appropriées
+    // .projs = {NULL, NULL}, // Initialisez projs avec les valeurs appropriées
+	// };
 	is_error_args(argc, argv);
 	init_s_fdf(argv[1], &fdf);
     mlx_hook(fdf.win, 17, 0, close_hook, &fdf); //bouton fermeture fenetre

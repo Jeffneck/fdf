@@ -19,8 +19,8 @@ void    apply_offset(t_map_elem *p_map_el, t_proj current)
 
 void    apply_depthmodif(t_map_elem *p_map_el, t_proj current)
 {
-    if(p_map_el->proj_z)
-        p_map_el->proj_z *= current.depthfactor;
+    if(p_map_el->z)
+        p_map_el->z *= current.depthfactor;
     else
-        p_map_el->proj_z = p_map_el->z * current.depthfactor;
+        p_map_el->z = p_map_el->z * current.depthfactor;
 }

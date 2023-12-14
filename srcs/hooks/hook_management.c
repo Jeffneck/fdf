@@ -19,17 +19,22 @@ int	manage_keyhook(int keysym, t_fdf *p_fdf)
 
 int	frame_hook(t_fdf *p_fdf)
 {
-	ft_printf("hooks : frame_hook\n");
+	// ft_printf("hooks : frame_hook\n");
 
-	if (ft_memcmp(p_fdf->projs.current, p_fdf->projs.last, sizeof(t_proj)) == 0)
+	if (ft_memcmp(&(p_fdf->projs.current), &(p_fdf->projs.last), sizeof(t_proj)) == 0)
+	{
+		// ft_printf("img unchanged\n");
 		return (0);
-	ft_memmove(p_fdf->s_imgtoclean, p_fdf->s_new_img, sizeof(t_proj));
+	}
 	// p_fdf->s_imgtoclean = p_fdf->s_new_img;
-	p_fdf->s_new_img = init_new_img(p_fdf);
-	put_view_in_img(p_fdf, p_fdf->s_new_img, p_fdf->map);
-	ft_memmove(p_fdf->projs.last, p_fdf->projs.current, sizeof(t_proj));
-	//ft_printf("hooks : frame_hook before image put window\n");
-	mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->s_new_img->img_mlx, 0, 0);
-	clean_close_imgstruct(p_fdf, p_fdf->s_imgtoclean);
+	ft_memmove(&(p_fdf->s_img_to_del), &(p_fdf->s_new_img), sizeof(t_proj));//il faut garder ca pour free
+	p_fdf->s_new_img = *init_new_img(p_fdf);
+	put_view_in_img(p_fdf, &(p_fdf->s_new_img), p_fdf->map);
+	// ft_printf("hooks : frame_hook\n");//
+	ft_memmove(&(p_fdf->projs.last), &(p_fdf->projs.current), sizeof(t_proj));
+	// ft_printf("hooks : frame_hook before image put window\n");
+	mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->s_new_img.img_mlx, 0, 0);
+	clean_close_imgstruct(p_fdf, &(p_fdf->s_img_to_del));
+	// ft_printf("hooks : frame_hook sortie\n");
 	return (1);
 }
