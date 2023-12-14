@@ -2,20 +2,20 @@
 # define FDF_H
 
 # include "../libft/libft.h"
-# include "../minilibx-linux/mlx.h"
-# include "../minilibx-linux/mlx_int.h" //pour les macros
-// # include "../minilibx-test/mlx.h" //supprimer plus tard
-// # include "../minilibx-test/mlx_int.h" //supprimer plus tard
+//# include "../minilibx-linux/mlx.h"
+//# include "../minilibx-linux/mlx_int.h" //pour les macros
+# include "../minilibx-test/mlx.h" //supprimer plus tard
+# include "../minilibx-test/mlx_int.h" //supprimer plus tard
 # include <fcntl.h>
 # include <math.h>
 # include <stdint.h> // retirable si on utilise les unsigned int plutot que uint32_t ?
 
 // MACROS
 # ifndef WIDTH
-#  define WIDTH 1000
+#  define WIDTH 700
 # endif //WIDTH
 # ifndef HEIGHT
-#  define HEIGHT 1000
+#  define HEIGHT 700
 # endif //HEIGHT
 # ifndef SCALE_FACTOR 
 #  define SCALE_FACTOR 0.85 //remplacer par 0.85
