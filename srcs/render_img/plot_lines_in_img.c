@@ -2,7 +2,7 @@
 
 void    put_pixel(t_imgstruct *p_img, int col, int line, int color) //il faut surement envoyer *p_img 
 {
-	ft_printf("plot_lines in img : put_pixel x = %d y = %d\n", col, line);//
+	// ft_printf("plot_lines in img : put_pixel x = %d y = %d\n", col, line);//
     int offset;
 
     offset = (p_img->line_len * line) + (p_img->bits_per_pixel * col / 8);
@@ -13,17 +13,17 @@ void    put_pixel(t_imgstruct *p_img, int col, int line, int color) //il faut su
 void    plot_low_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem p1)
 {
 	ft_printf("plot_lines in img : plot_low_slope\n");//
-    while (p0.x != p1.x)//erreur dans la condition ? 
+    while (p0.proj_x != p1.proj_x)//erreur dans la condition ? 
     {
-	    // ft_printf("want to put pixel in x = %d y = %d color = %d\n", p0.x, p0.y, p0.color);//
-        if (p0.x >= 0 && p0.x < WIDTH && p0.y >= 0 && p0.y < HEIGHT) 
-            put_pixel(p_img, p0.x, p0.y, p0.color); //vraie commande a garder
-        p0.x += plt.x_step;
+	    // ft_printf("want to put pixel in proj_x = %d y = %d color = %d\n", p0.proj_x, p0.y, p0.color);//
+        if (p0.proj_x >= 0 && p0.proj_x < WIDTH && p0.proj_y >= 0 && p0.proj_y < HEIGHT) 
+            put_pixel(p_img, p0.proj_x, p0.proj_y, p0.color); //vraie commande a garder
+        p0.proj_x += plt.x_step;
         if (plt.decision <= 0)
             plt.decision += 2 * plt.y_diff;
         else
         {
-            p0.y += plt.y_step;
+            p0.proj_y += plt.y_step;
             plt.decision += 2 * (plt.y_diff - plt.x_diff);
         }
     }
@@ -32,17 +32,17 @@ void    plot_low_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem
 void    plot_high_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem p1)
 {
 	ft_printf("plot_lines in img : plot_high_slope\n");//
-    while (p0.y != p1.y) // <= ne marche pas si on fait -1 
+    while (p0.proj_y != p1.proj_y) // <= ne marche pas si on fait -1 
     {
-	    // ft_printf("want to put pixel in x = %d y = %d color = %d\n", p0.x, p0.y, p0.color);//
-        if (p0.x >= 0 && p0.x < WIDTH && p0.y >= 0 && p0.y < HEIGHT) //mettre ca dans put pixel
-            put_pixel(p_img, p0.x, p0.y, p0.color);
-        p0.y += plt.y_step;
+	    // ft_printf("want to put pixel in x = %d proj_y = %d color = %d\n", p0.x, p0.proj_y, p0.color);//
+        if (p0.proj_x >= 0 && p0.proj_x < WIDTH && p0.proj_y >= 0 && p0.proj_y < HEIGHT) //mettre ca dans put pixel
+            put_pixel(p_img, p0.proj_x, p0.proj_y, p0.color);
+        p0.proj_y += plt.y_step;
         if (plt.decision <= 0)
             plt.decision += 2 * plt.x_diff;
         else
         {
-            p0.x += plt.x_step;
+            p0.proj_x += plt.x_step;
             plt.decision += 2 * (plt.x_diff - plt.y_diff);
         }
     }
@@ -51,14 +51,14 @@ void    plot_high_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_ele
 void    init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1)
 {
 	// ft_printf("plot_lines in img : init_ploting_utils\n");//
-    p_plt->x_diff = abs(p1.x - p0.x);
-    p_plt->y_diff = abs(p1.y - p0.y);
+    p_plt->x_diff = abs(p1.proj_x - p0.proj_x);
+    p_plt->y_diff = abs(p1.proj_y - p0.proj_y);
     //methode peu optimisee car on se sert soit de x_step soit y_step mais en soit c'est plus clair comme ça 
-    if (p1.x > p0.x)
+    if (p1.proj_x > p0.proj_x)
         p_plt->x_step = 1;
     else
         p_plt->x_step = -1;
-    if (p1.y > p0.y)
+    if (p1.proj_y > p0.proj_y)
         p_plt->y_step = 1;
     else
         p_plt->y_step = -1;

@@ -8,10 +8,14 @@ void    transform_proj_mapelem(t_fdf *p_fdf, t_map_elem *p_map_el, int flag)
 
     current = p_fdf->projs.current;
     last = p_fdf->projs.last;
+    ft_printf("coor centered x = %d y = %d proj_x = %d proj_y = %d\n", p_map_el->x, p_map_el->y, p_map_el->proj_x, p_map_el->proj_y);
     if (flag || current.scale != last.scale)
         apply_scaling(p_map_el, current);
+    ft_printf("coor after scaling x = %d y = %d proj_x = %d proj_y = %d\n", p_map_el->x, p_map_el->y, p_map_el->proj_x, p_map_el->proj_y);
     if (flag || current.offset_x != last.offset_x || current.offset_y != last.offset_y)
         apply_offset(p_map_el, current);
+    ft_printf("coor after scaling and offset x = %d y = %d proj_x = %d proj_y = %d\n", p_map_el->x, p_map_el->y, p_map_el->proj_x, p_map_el->proj_y);
+    
 }
 
 int     transform_base_mapelem(t_fdf *p_fdf, t_map_elem *p_map_el)

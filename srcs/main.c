@@ -49,8 +49,8 @@ void	init_s_projections(t_fdf *p_fdf, t_projs* projs)
 	ft_printf("main : init_s_projection\n");//
 	define_offsets(&(projs->current), p_fdf->map_data, projs->current.scale);
 	projs->current.rot_x = 0;//verifier les valeurs de rot
-	projs->current.rot_y = 0.79; 
-	projs->current.rot_z = 0.79;
+	projs->current.rot_y = 0; 
+	projs->current.rot_z = 0;
 	projs->current.depthfactor = 1;
 	ft_printf("main : init_s_projection\n");//
 }

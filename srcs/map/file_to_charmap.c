@@ -29,6 +29,7 @@ char	*get_map_in_char1(int map_fd)
 		gnl_tmp = get_next_line(map_fd);
 	}	
 	free_char1(&gnl_tmp);
+	ft_printf("map char 1 =%s", map_str);//
 	return (map_str);
 }
 
