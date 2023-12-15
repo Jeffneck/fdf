@@ -70,9 +70,9 @@ t_map_data	get_map_data(t_map_elem **map)
 				md.borders.min_y = (int) floor(map[i][j].y);
 			else if ((int) ceil(map[i][j].y) > md.borders.max_y)
 				md.borders.max_y = (int) ceil(map[i][j].y);
-			printf("j = %lu\n", j);
+			// printf("j = %lu\n", j);//
 			j++;
-			printf("j = %lu\n", j);
+			// printf("j = %lu\n", j);//
 		}
 		i++;
 	}
@@ -126,18 +126,18 @@ void	define_scale(t_proj *p_proj, t_map_data	md)
 	else
 		p_proj->scale = scale_y;
 	// p_proj->scale = *((double *)(min_bytewise(&scale_x, &scale_y, sizeof(double)))); // meme chose mais plus complexe
-	printf("utils : define_scale => scale finale = %f\n", p_proj->scale);//
+	printf("projection utils : define_scale => scale finale = %f\n", p_proj->scale);//
 
 }
 
 void	define_offsets(t_proj *p_proj, t_map_data md, double scale)
 {
-	printf("utils : define_offsets\n");//
+	// printf("utils : define_offsets\n");//
 	p_proj->offset_x = md.center_x + round((WIDTH - (scale * md.width)) / 2);
 	p_proj->offset_y = md.center_y + round((HEIGHT - (scale * md.height)) / 2);
 	
 	// printf("utils : define_offsets => scale received = %f width map = %f, height map = %f = offset x = %d offset y = %d\n", (float)round(scale), (float)round(scale * abs(mb.max_x - mb.min_x)), (float)round(6.4 * abs(mb.max_y - mb.min_y)), p_proj->offset_x, p_proj->offset_y);//
 	// ft_printf(" after scale offset min x = %d  max x = %d min y = %d max_y = %d", (int)(p_proj->offset_x + scale * mb.min_x), (int)(p_proj->offset_x + scale * mb.max_x), (int)(p_proj->offset_y + scale * mb.min_y), (int)(p_proj->offset_y + scale * mb.max_y));
-	ft_printf("offsetx = %d offsety = %d md_centerx = %d md_centery = %d\n", p_proj->offset_x, p_proj->offset_x, md.center_x, md.center_y);
+	ft_printf("projection utils :define offset offsetx = %d offsety = %d md_centerx = %d md_centery = %d\n", p_proj->offset_x, p_proj->offset_x, md.center_x, md.center_y);
 	//scale = scale + 0; // pour eviter message erreur
 }

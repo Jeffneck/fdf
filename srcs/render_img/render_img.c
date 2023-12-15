@@ -8,13 +8,15 @@ void    transform_proj_mapelem(t_fdf *p_fdf, t_map_elem *p_map_el, int flag)
 
     current = p_fdf->projs.current;
     last = p_fdf->projs.last;
-    ft_printf("coor centered x = %d y = %d proj_x = %d proj_y = %d\n", p_map_el->x, p_map_el->y, p_map_el->proj_x, p_map_el->proj_y);
-    if (flag || current.scale != last.scale)
-        apply_scaling(p_map_el, current);
-    ft_printf("coor after scaling x = %d y = %d proj_x = %d proj_y = %d\n", p_map_el->x, p_map_el->y, p_map_el->proj_x, p_map_el->proj_y);
-    if (flag || current.offset_x != last.offset_x || current.offset_y != last.offset_y)
-        apply_offset(p_map_el, current);
-    ft_printf("coor after scaling and offset x = %d y = %d proj_x = %d proj_y = %d\n", p_map_el->x, p_map_el->y, p_map_el->proj_x, p_map_el->proj_y);
+    ft_printf("coor centered x = %d y = %d \n", p_map_el->x, p_map_el->y);
+    // if (flag || current.scale != last.scale)
+    apply_scaling(p_map_el, current);
+    ft_printf("coor after scaling proj_x = %d proj_y = %d\n", p_map_el->proj_x, p_map_el->proj_y);
+    // if (flag || current.offset_x != last.offset_x || current.offset_y != last.offset_y)
+    apply_offset(p_map_el, current);
+    ft_printf("coor after scaling and offset proj_x = %d proj_y = %d\n", p_map_el->proj_x, p_map_el->proj_y);
+    flag = flag + 1; //test
+    last = last; //test
     
 }
 
@@ -55,19 +57,20 @@ void    put_view_in_img(t_fdf *p_fdf, t_imgstruct *p_img, t_map_elem **map)
         j = 0; 
         while (map[i][j].valid)
         {
-	        printf("put_view_in_img i = %zu j = %zu\n", i,j);//
-            ft_printf("elem qui segfault = %d\n", map[i][j].valid); //test
+	        // printf("put_view_in_img i = %zu j = %zu\n", i,j);//
+            // ft_printf("elem qui segfault = %d\n", map[i][j].valid); //test
             modif_flag = transform_base_mapelem(p_fdf, &map[i][j]);
             transform_proj_mapelem(p_fdf, &map[i][j], modif_flag); 
+            put_pixel(p_img, map[i][j + 1].proj_x, map[i][j + 1].proj_y, 300000);// test
             if (map[i][j + 1].valid)
                 plot_line(p_img, map[i][j], map[i][j + 1]);
-            if (map[i + 1])
-            {
-                if (map[i + 1][j].valid)
-                    plot_line(p_img, map[i][j], map[i + 1][j]);
-                if(map[i + 1][j + 1].valid)
-                    plot_line(p_img,map[i][j], map[i + 1][j + 1]);
-            }
+            // if (map[i + 1])
+            // {
+            //     if (map[i + 1][j].valid)
+            //         plot_line(p_img, map[i][j], map[i + 1][j]);
+            //     if(map[i + 1][j + 1].valid)
+            //         plot_line(p_img,map[i][j], map[i + 1][j + 1]);
+            // }
             j++;
         }
         i++;

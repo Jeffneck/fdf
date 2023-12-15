@@ -2,7 +2,6 @@
 
 void    center_map(t_map_data md, t_map_elem **map)
 {
-    ft_printf("center map : center_map\n");//
     size_t  i;
     size_t  j;
 
@@ -18,4 +17,5 @@ void    center_map(t_map_data md, t_map_elem **map)
         }
         i++;
     }
+    ft_printf("center map : center_map offset center x = %d offset center y = %d\n", md.center_x, md.center_y);//
 }

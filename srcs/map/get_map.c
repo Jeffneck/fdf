@@ -18,17 +18,17 @@ t_map_elem	**fill_map_elem2(char ***map_char3, t_map_elem **map_elem2)
 				return (free_char3(&map_char3), free_map_elem2(&map_elem2), NULL);
 			map_elem2[i][j] = (t_map_elem) {j, i, ft_atoi(el_split[0]), 0, 0, strhexa_to_colorint(el_split[1]), 1};
 			free_char2(&el_split);
-			printf("j = %lu\n", j);
+			// printf("j = %lu\n", j);//
 			j++;
-			printf("j = %lu\n", j);
+			// printf("j = %lu\n", j); //
 		}
-		//map_elem2[i][j].valid = 0; 
+		//map_elem2[i][j].valid = 0; //inutile car deja a 0 ?
 		i++;
 	}
-	int d = 0;//
-	while (map_char3[d])//
-		d++;
-	printf("taille = %d\n", d);//
+	// int d = 0;//
+	// while (map_char3[d])//
+	// 	d++;
+	// printf("taille = %d\n", d);//
 	return(free_char3(&map_char3), map_elem2);
 }
 

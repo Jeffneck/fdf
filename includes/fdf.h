@@ -12,13 +12,13 @@
 
 // MACROS
 # ifndef WIDTH
-#  define WIDTH 700
+#  define WIDTH 1000
 # endif //WIDTH
 # ifndef HEIGHT
-#  define HEIGHT 700
+#  define HEIGHT 1000
 # endif //HEIGHT
 # ifndef SCALE_FACTOR 
-#  define SCALE_FACTOR 0.85 //remplacer par 0.85
+#  define SCALE_FACTOR 0.1 //remplacer par 0.85
 # endif //SCALE_FACTOR
 # ifndef ENDIANESS
 #  define ENDIANESS 0
@@ -186,13 +186,15 @@ void    init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1);
 void    plot_line(t_imgstruct *p_img, t_map_elem p0, t_map_elem p1);
 
 //*****************MAPS
+
+//center_map
+void    center_map(t_map_data md, t_map_elem **map);
+
 //get_map
 t_map_elem	**fill_map_elem2(char ***map_char3, t_map_elem **map_elem2);//penser a terminer chaque ligne par un NULL
 t_map_elem	**create_map_elem2(char ***map_char3);
 t_map_elem **get_map(char *filename);
 
-//center_map
-void    center_map(t_map_data md, t_map_elem **map);
 
 //file_to_charmap
 char	*get_map_in_char1(int map_fd);//

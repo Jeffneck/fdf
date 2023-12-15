@@ -32,6 +32,7 @@ void    plot_low_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem
 void    plot_high_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem p1)
 {
 	ft_printf("plot_lines in img : plot_high_slope\n");//
+	ft_printf("AAAAAAAp0 projx %d p0 projy %d p1 projx %d p1 projy %d \n", p0.proj_x, p0.proj_y, p1.proj_x, p1.proj_y);//
     while (p0.proj_y != p1.proj_y) // <= ne marche pas si on fait -1 
     {
 	    // ft_printf("want to put pixel in x = %d proj_y = %d color = %d\n", p0.x, p0.proj_y, p0.color);//
@@ -70,17 +71,19 @@ void    plot_line(t_imgstruct *p_img, t_map_elem p0, t_map_elem p1)
     t_plot plt;
 
     init_ploting_utils(&plt, p0, p1);
+    ft_printf("ZZZZZZZZZp0 projx %d p0 projy %d p1 projx %d p1 projy %d \n", p0.proj_x, p0.proj_y, p1.proj_x, p1.proj_y);//
+    plot_high_slope(p_img, plt, p0, p1); // test
     // partie qu' il faudra revoir
-    if (plt.x_diff > plt.y_diff)
-    {
-        plt.decision = 2 * plt.y_diff - plt.x_diff;
-        plot_low_slope(p_img, plt, p0, p1);
-    }
-    else
-    {
-        plt.decision = 2 * plt.x_diff - plt.y_diff;
-        plot_high_slope(p_img, plt, p0, p1);   
-    }
+    // if (plt.x_diff > plt.y_diff)
+    // {
+    //     plt.decision = 2 * plt.y_diff - plt.x_diff;
+    //     plot_low_slope(p_img, plt, p0, p1);
+    // }
+    // else
+    // {
+    //     plt.decision = 2 * plt.x_diff - plt.y_diff;
+    //     plot_high_slope(p_img, plt, p0, p1);   
+    // }
     //mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->img_struct.img, 0, 0); // test a retirer plus tard !!
     //sleep(1); //pour voir ce qu' il se passe
 }

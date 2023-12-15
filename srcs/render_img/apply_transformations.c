@@ -11,9 +11,9 @@ void    apply_scaling(t_map_elem *p_map_el, t_proj current)
 
 void    apply_offset(t_map_elem *p_map_el, t_proj current)
 {
-	// ft_printf("Before offset x = %d y = %d \n", p_view_el->x, p_view_el->y);//
-    p_map_el->proj_x = p_map_el->x + current.offset_x;
-    p_map_el->proj_y = p_map_el->y + current.offset_y;
+	//ft_printf("Before offset projx = %d projy = %d, current offsetx %d  current offsety %d \n", p_view_el->x, p_view_el->y);//
+    p_map_el->proj_x = p_map_el->proj_x + current.offset_x;
+    p_map_el->proj_y = p_map_el->proj_y + current.offset_y;
 
 }
 
