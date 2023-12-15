@@ -1,28 +1,48 @@
 # include "../../includes/fdf.h"
 
+int transform_base_map_el(t_map_elem *p_map_el, t_proj current, t_proj last)
+{
+    int    modif_flag;
+
+    modif_flag = 0;
+    if (current.depthfactor != last.depthfactor)
+    {
+        apply_depthmodif(p_map_el, current);
+        modif_flag = 1;
+    }
+    if (current.rot_x != last.rot_x || current.rot_y != last.rot_y || current.rot_z != last.rot_z)
+    {
+        apply_rotation(p_map_el, current);
+        modif_flag = 1;
+    }
+    return (modif_flag);
+}
+
+void    transform_projection_map_el(t_map_elem *p_map_el, t_proj current, t_proj last, int flag)
+{
+    if (flag || current.scale != last.scale)
+        apply_scaling(p_map_el, current);
+    if (flag || current.offset_x != last.offset_x || current.offset_y != last.offset_y)
+        apply_offset(p_map_el, current);
+}
+
 void    transform_coor_in_proj_coor(t_fdf *p_fdf, t_map_elem *p_map_el)
 {
 	// printf("render_img : transform_map_in_view scale = %f offsetx = %d offsety = %d\n", p_fdf->proj.scale, p_fdf->proj.offset_x, p_fdf->proj.offset_y);//
     t_proj current; 
     t_proj  last;
-    t_map_data md;
+    int    modif_flag;
+    //t_map_data md;
 
     current = *(p_fdf->projs.current);
     last = *(p_fdf->projs.last);
-    md = p_fdf->map_data;
-    if (current.rot_x != last.rot_x || current.rot_y != last.rot_y || current.rot_z != last.rot_z)
-    {
-        center_or_decenter_map_el(md, last, p_map_el, 1);
-        apply_rotation(p_map_el, current);
-        center_or_decenter_map_el(md, last, p_map_el, -1);
-    }
-    if (current.scale != last.scale)
-        apply_scaling(p_map_el, current);
-    if (current.offset_x != last.offset_x || current.offset_y != last.offset_y)
-        apply_offset(p_map_el, current);
-    if (current.depthfactor != last.depthfactor)
-        apply_depthmodif(p_map_el, current);
+    //md = p_fdf->map_data;
+    modif_flag = transform_base_map_el(p_map_el, *current, *last);
+    transform_projection_map_el(p_map_el, *current, *last, modif_flag);
+
+    
 }
+
 
 // void    create_projection(t_fdf *p_fdf, t_map_elem **map)
 // {
