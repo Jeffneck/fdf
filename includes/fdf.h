@@ -18,7 +18,7 @@
 #  define HEIGHT 1000
 # endif //HEIGHT
 # ifndef SCALE_FACTOR 
-#  define SCALE_FACTOR 0.1 //remplacer par 0.85
+#  define SCALE_FACTOR 0.85 //remplacer par 0.85
 # endif //SCALE_FACTOR
 # ifndef ENDIANESS
 #  define ENDIANESS 0
@@ -163,8 +163,8 @@ void	depthmodif_hook(int keysym, t_fdf *p_fdf);
 
 //*****************RENDER_IMG
 //render_img
-void    transform_coor_in_proj_coor(t_fdf *p_fdf, t_map_elem *p_map_el);
-//void	create_projection(t_fdf *p_fdf, t_map_elem **map);
+void    transform_proj_mapelem(t_fdf *p_fdf, t_map_elem *p_map_el, int flag);
+int     transform_base_mapelem(t_fdf *p_fdf, t_map_elem *p_map_el);
 void    put_view_in_img(t_fdf *p_fdf, t_imgstruct *p_img, t_map_elem **map); 
 
 //apply_transformations
@@ -221,6 +221,7 @@ int	is_error_filename(char	*file_name);
 t_map_data	get_map_data(t_map_elem **map);
 void	define_scale(t_proj *p_proj, t_map_data md);
 void	define_offsets(t_proj *p_proj, t_map_data mb, double scale);
+void	init_proj_map(t_fdf *p_fdf, t_map_elem **map); //dans le main pour le moment
 
 //closing_utils
 int		close_program(t_fdf *p_fdf, char *strerr);

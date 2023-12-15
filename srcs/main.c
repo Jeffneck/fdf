@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 15:33:53 by hanglade          #+#    #+#             */
-/*   Updated: 2023/12/15 10:09:36 by hanglade         ###   ########.fr       */
+/*   Updated: 2023/12/15 15:32:10 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int	init_s_fdf(char *filename, t_fdf *p_fdf)
 	if (mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->s_new_img.img_mlx, 0, 0) < 0)// test d' affichage image vide ?
 		close_program(p_fdf, "Error : mlx_put_image_to_window()");
 	init_s_projections(p_fdf, &(p_fdf->projs));
+	init_proj_map(p_fdf, p_fdf->map); //utile ? 
+	// put_view_in_img(p_fdf, &(p_fdf->s_new_img), p_fdf->map);// utile ?
 	return (1);
 }
 

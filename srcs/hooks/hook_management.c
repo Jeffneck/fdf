@@ -29,6 +29,7 @@ int	frame_hook(t_fdf *p_fdf)
 	// p_fdf->s_imgtoclean = p_fdf->s_new_img;
 	ft_memmove(&(p_fdf->s_img_to_del), &(p_fdf->s_new_img), sizeof(t_proj));//il faut garder ca pour free
 	p_fdf->s_new_img = *init_new_img(p_fdf);
+	init_proj_map(p_fdf, p_fdf->map);//ajout test
 	put_view_in_img(p_fdf, &(p_fdf->s_new_img), p_fdf->map);
 	// ft_printf("hooks : frame_hook\n");//
 	ft_memmove(&(p_fdf->projs.last), &(p_fdf->projs.current), sizeof(t_proj));

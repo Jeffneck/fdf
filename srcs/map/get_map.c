@@ -22,7 +22,7 @@ t_map_elem	**fill_map_elem2(char ***map_char3, t_map_elem **map_elem2)
 			j++;
 			// printf("j = %lu\n", j); //
 		}
-		//map_elem2[i][j].valid = 0; //inutile car deja a 0 ?
+		map_elem2[i][j].valid = 0; //inutile car deja a 0 ?
 		i++;
 	}
 	// int d = 0;//
