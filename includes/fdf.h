@@ -57,6 +57,7 @@ typedef struct s_map_elem
 	int				z;
 	int				proj_x;
 	int				proj_y;
+	int				temp_z;
 	int				color;
 	int				valid;
 }	t_map_elem;
