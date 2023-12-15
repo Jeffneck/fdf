@@ -73,10 +73,10 @@ void    put_view_in_img(t_fdf *p_fdf, t_imgstruct *p_img, t_map_elem **map)
 	ft_printf("render_img : put_view_in_img\n");//
     size_t  i; 
     size_t  j;
-    int     modif_flag;
-    //ft_printf("elem qui segfault = %d\n", map[1][2].valid); //test
-    modif_flag = 0;//
-    modif_flag = modif_flag + 1;// TEST
+    // int     modif_flag;
+    // //ft_printf("elem qui segfault = %d\n", map[1][2].valid); //test
+    // modif_flag = 0;//
+    // modif_flag = modif_flag + 1;// TEST
     p_fdf = p_fdf + 1; //test
     i = 0;
     while (map[i])
@@ -92,7 +92,6 @@ void    put_view_in_img(t_fdf *p_fdf, t_imgstruct *p_img, t_map_elem **map)
                 plot_line(p_img, map[i][j], map[i][j + 1]);
             if (map[i + 1])
             {
-                ft_printf("aaa");
                 if (map[i + 1][j].valid)
                     plot_line(p_img, map[i][j], map[i + 1][j]);
                 if(map[i + 1][j + 1].valid)

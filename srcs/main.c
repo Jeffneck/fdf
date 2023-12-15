@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 15:33:53 by hanglade          #+#    #+#             */
-/*   Updated: 2023/12/15 15:32:10 by hanglade         ###   ########.fr       */
+/*   Updated: 2023/12/15 18:30:35 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	init_s_projections(t_fdf *p_fdf, t_projs* projs)
 	define_scale(&(projs->current), p_fdf->map_data);
 	ft_printf("main : init_s_projection\n");//
 	define_offsets(&(projs->current), p_fdf->map_data, projs->current.scale);
-	projs->current.rot_x = 0;//verifier les valeurs de rot
-	projs->current.rot_y = 0; 
+	projs->current.rot_x = -0.52;//verifier les valeurs de rot
+	projs->current.rot_y = 0.52; 
 	projs->current.rot_z = 0;
 	projs->current.depthfactor = 1;
 	ft_printf("main : init_s_projection\n");//

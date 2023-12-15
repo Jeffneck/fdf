@@ -12,10 +12,10 @@
 
 // MACROS
 # ifndef WIDTH
-#  define WIDTH 1000
+#  define WIDTH 2600
 # endif //WIDTH
 # ifndef HEIGHT
-#  define HEIGHT 1000
+#  define HEIGHT 2000
 # endif //HEIGHT
 # ifndef SCALE_FACTOR 
 #  define SCALE_FACTOR 0.85 //remplacer par 0.85
@@ -143,6 +143,7 @@ typedef struct s_fdf
 //*****************COLORS
 //color.c
 int		strhexa_to_colorint(char *strhexa);
+int		create_color_gradient(int a, int b, int color_begin, int color_end);
 
 //*****************MAIN
 int		is_error_args(int argc, char **argv);//
