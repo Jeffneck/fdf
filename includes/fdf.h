@@ -174,10 +174,10 @@ void	apply_offset(t_map_elem *p_map_el, t_proj proj);
 void	apply_depthmodif(t_map_elem *p_map_el, t_proj proj);
 
 //apply_rotation
-void    apply_rot_x(t_map_elem *p_map_el, double cos_a, double sin_a, t_proj proj);
-void	apply_rot_y(t_map_elem *p_map_el, double cos_a, double sin_a, t_proj proj);
+void    apply_rot_x(t_map_elem *p_map_el, double cos_a, double sin_a);
+void	apply_rot_y(t_map_elem *p_map_el, double cos_a, double sin_a);
 void	apply_rot_z(t_map_elem *p_view_el, double cos_a, double sin_a);
-void	apply_rotation(t_map_elem *p_view_el, t_proj proj);
+void    apply_rotation(t_map_elem *p_map_el, t_proj proj);
 
 //plot_lines_in_img
 void    put_pixel(t_imgstruct *p_img, int col, int line, int color); 

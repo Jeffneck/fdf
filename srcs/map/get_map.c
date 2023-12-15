@@ -16,7 +16,7 @@ t_map_elem	**fill_map_elem2(char ***map_char3, t_map_elem **map_elem2)
 			el_split = ft_split(map_char3[i][j], ',');
 			if (!el_split)
 				return (free_char3(&map_char3), free_map_elem2(&map_elem2), NULL);
-			map_elem2[i][j] = (t_map_elem) {j, i, ft_atoi(el_split[0]), 0, 0, strhexa_to_colorint(el_split[1]), 1};
+			map_elem2[i][j] = (t_map_elem) {j, i, ft_atoi(el_split[0]), 0, 0, ft_atoi(el_split[0]), strhexa_to_colorint(el_split[1]), 1};
 			free_char2(&el_split);
 			// printf("j = %lu\n", j);//
 			j++;
