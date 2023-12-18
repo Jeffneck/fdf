@@ -13,11 +13,14 @@ void    put_pixel(t_imgstruct *p_img, int col, int line, int color) //il faut su
 void    plot_low_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem p1)
 {
 	// ft_printf("plot_lines in img : plot_low_slope\n");//
+    int gradient; 
+    
     while (p0.proj_x != p1.proj_x)//erreur dans la condition ? 
     {
 	    // ft_printf("want to put pixel in proj_x = %d projy = %d color = %d\n", p0.proj_x, p0.proj_y, p0.color);//
+        gradient = create_color_gradient(abs(p0.proj_y - p1.proj_y), plt.y_diff, p0.color, p1.color);
         if (p0.proj_x >= 0 && p0.proj_x < WIDTH && p0.proj_y >= 0 && p0.proj_y < HEIGHT) 
-            put_pixel(p_img, p0.proj_x, p0.proj_y, p0.color); //vraie commande a garder
+            put_pixel(p_img, p0.proj_x, p0.proj_y, gradient); //vraie commande a garder
         p0.proj_x += plt.x_step;
         if (plt.decision <= 0)
             plt.decision += 2 * plt.y_diff;

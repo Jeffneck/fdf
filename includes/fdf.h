@@ -81,13 +81,13 @@ typedef struct s_plot_utils
 }	t_plot;
 
 // \_	color
-typedef struct s_color
+typedef struct s_argb
 {
-	int	r;
-	int	g;
-	int	b;
-	int	a;
-}	t_color;
+	unsigned char	a;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+}	t_argb;
 
 typedef struct s_map_data
 {
@@ -143,7 +143,7 @@ typedef struct s_fdf
 //*****************COLORS
 //color.c
 int		strhexa_to_colorint(char *strhexa);
-int		create_color_gradient(int a, int b, int color_begin, int color_end);
+int		process_color(int curr_steps, int tot_steps, int color_ini, int color_end);
 
 //*****************MAIN
 int		is_error_args(int argc, char **argv);//

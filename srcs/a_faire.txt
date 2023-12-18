@@ -4,3 +4,4 @@ xmise a l echelle de z differente de scale?
 simplifier le calcul 
 
 implementer des profils de couleurs et les mettre sur les touches pave numerique
+ligne vide en retour de GNL = erreur ?
