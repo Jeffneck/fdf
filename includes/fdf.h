@@ -12,10 +12,10 @@
 
 // MACROS
 # ifndef WIDTH
-#  define WIDTH 2600
+#  define WIDTH 1200
 # endif //WIDTH
 # ifndef HEIGHT
-#  define HEIGHT 2000
+#  define HEIGHT 1200
 # endif //HEIGHT
 # ifndef SCALE_FACTOR 
 #  define SCALE_FACTOR 0.85 //remplacer par 0.85

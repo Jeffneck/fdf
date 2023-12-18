@@ -42,8 +42,8 @@ void	init_s_projections(t_fdf *p_fdf, t_projs* projs)
 	ft_printf("main : init_s_projection\n");//
 	
 	//projs->last = NULL; //deja mis a 0 car fdf le contenait
-	if (p_fdf->map_data.width >= WIDTH || p_fdf->map_data.height >= HEIGHT)
-		close_program(p_fdf, "Error : window too small");
+	// if (p_fdf->map_data.width >= WIDTH || p_fdf->map_data.height >= HEIGHT) //inutil + bloque des maps legit
+	// 	close_program(p_fdf, "Error : window too small");
 	ft_printf("main : init_s_projection\n");//
 	define_scale(&(projs->current), p_fdf->map_data);
 	ft_printf("main : init_s_projection\n");//

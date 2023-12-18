@@ -2,6 +2,7 @@
 
 void    center_map(t_map_data md, t_map_elem **map)
 {
+    // ft_printf("center map : center map");
     size_t  i;
     size_t  j;
 
