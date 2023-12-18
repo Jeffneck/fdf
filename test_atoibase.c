@@ -24,6 +24,8 @@ int	ft_atoi_base(const char *nptr, char *base, int size_base)
 	i = 0;
 	nbr = 0;
 	sign = 1;
+	if (nptr == NULL)
+		return (0);
 	while (nptr[i] == ' ' || (nptr[i] >= 9 && (nptr[i] <= 13)))
 		i++;
 	if (nptr[i] == '+' || nptr[i] == '-')
@@ -32,14 +34,15 @@ int	ft_atoi_base(const char *nptr, char *base, int size_base)
 			sign = -sign;
 		i++;
 	}
-	pos = pos_in_base(nptr[i], base);
-	while (pos >= 0)
-	{
-		nbr *= size_base;
+	while (nptr[i])
+    {
+        pos = pos_in_base(nptr[i], base);
+        if (pos < 0)
+            return ((int)(nbr * sign));
+        nbr *= size_base;
         nbr += pos;
-		i++;
-		pos = pos_in_base(nptr[i], base);
-	}
+        i++;
+    }
 	return ((int)(nbr * sign));
 }
 
