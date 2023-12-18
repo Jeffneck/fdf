@@ -6,6 +6,7 @@ SRCS	= 	ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c ft_isascii.c\
 			ft_putnbr_fd.c ft_putstr_fd.c ft_striteri.c ft_strmapi.c\
 			ft_printf_utils.c ft_printf_utils_2.c ft_printf.c\
 			get_next_line_utils.c get_next_line.c\
+			ft_atoi_base.c\
 
 OBJS	= ${SRCS:.c=.o}
 

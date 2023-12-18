@@ -98,4 +98,6 @@ typedef struct s_fd
 char	*get_next_line(int fd);
 char	*init_buffer(int fd, t_fd *fd_buffs);
 
+int	ft_atoi_base(const char *nptr, char *base, int size_base);
+
 #endif
