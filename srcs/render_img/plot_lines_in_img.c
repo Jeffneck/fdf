@@ -13,12 +13,17 @@ void    put_pixel(t_imgstruct *p_img, int col, int line, int color) //il faut su
 void    plot_low_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem p1)
 {
 	// ft_printf("plot_lines in img : plot_low_slope\n");//
-    int gradient; 
-    
+    int nb_steps;
+    int gradient;
+
+    nb_steps = 0;
     while (p0.proj_x != p1.proj_x)//erreur dans la condition ? 
     {
 	    // ft_printf("want to put pixel in proj_x = %d projy = %d color = %d\n", p0.proj_x, p0.proj_y, p0.color);//
-        gradient = create_color_gradient(abs(p0.proj_y - p1.proj_y), plt.y_diff, p0.color, p1.color);
+        if (p0.color != p1.color)
+            gradient = process_color(nb_steps, plt.x_diff, p0.color, p1.color);
+        else
+            gradient = p0.color;
         if (p0.proj_x >= 0 && p0.proj_x < WIDTH && p0.proj_y >= 0 && p0.proj_y < HEIGHT) 
             put_pixel(p_img, p0.proj_x, p0.proj_y, gradient); //vraie commande a garder
         p0.proj_x += plt.x_step;
@@ -29,6 +34,7 @@ void    plot_low_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem
             p0.proj_y += plt.y_step;
             plt.decision += 2 * (plt.y_diff - plt.x_diff);
         }
+        nb_steps++;
     }
 }
 
@@ -36,11 +42,17 @@ void    plot_high_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_ele
 {
 	// ft_printf("plot_lines in img : plot_high_slope\n");//
 	// ft_printf("AAAAAAAp0 projx %d p0 projy %d p1 projx %d p1 projy %d \n", p0.proj_x, p0.proj_y, p1.proj_x, p1.proj_y);//
-    int gradient; 
+    int nb_steps;
+    int gradient;
 
+    nb_steps = 0;
     while (p0.proj_y != p1.proj_y) // <= ne marche pas si on fait -1 
     {
-        gradient = create_color_gradient(abs(p0.proj_y - p1.proj_y), plt.y_diff, p0.color, p1.color);
+        if (p0.color != p1.color)
+            gradient = process_color(nb_steps, plt.y_diff, p0.color, p1.color);
+        else
+            gradient = p0.color;
+        // gradient = create_color_gradient(abs(p0.proj_y - p1.proj_y), plt.y_diff, p0.color, p1.color);
         // ft_printf("want to put pixel in proj x = %d proj_y = %d color = %d\n", p0.proj_x, p0.proj_y, p0.color);//
         if (p0.proj_x >= 0 && p0.proj_x < WIDTH && p0.proj_y >= 0 && p0.proj_y < HEIGHT) //mettre ca dans put pixel
             put_pixel(p_img, p0.proj_x, p0.proj_y, gradient);
@@ -52,6 +64,7 @@ void    plot_high_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_ele
             p0.proj_x += plt.x_step;
             plt.decision += 2 * (plt.x_diff - plt.y_diff);
         }
+        nb_steps++;
     }
 }
 

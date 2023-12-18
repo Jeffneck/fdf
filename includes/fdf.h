@@ -15,13 +15,13 @@
 #  define WIDTH 1200
 # endif //WIDTH
 # ifndef HEIGHT
-#  define HEIGHT 1200
+#  define HEIGHT 1000
 # endif //HEIGHT
 # ifndef SCALE_FACTOR 
 #  define SCALE_FACTOR 0.85 //remplacer par 0.85
 # endif //SCALE_FACTOR
 # ifndef ENDIANESS
-#  define ENDIANESS 0
+#  define ENDIANESS 1
 # endif //ENDIANESS
 
 // STRUCTURES
