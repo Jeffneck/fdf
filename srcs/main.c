@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 15:33:53 by hanglade          #+#    #+#             */
-/*   Updated: 2023/12/15 18:30:35 by hanglade         ###   ########.fr       */
+/*   Updated: 2023/12/19 16:22:12 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_imgstruct	*init_new_img(t_fdf *p_fdf)
 {
 	t_imgstruct *img;
 
-	img = &((t_imgstruct) {0, 0, 0, 0, 0});
+	img = ft_calloc(1, sizeof(t_imgstruct));
 	img->img_mlx = mlx_new_image(p_fdf->mlx, WIDTH, HEIGHT); 
 	if (!img->img_mlx)
 		close_program(p_fdf, "Error : mlx_new_image()");//bien fermer la seconde image lors de close
@@ -73,16 +73,17 @@ int	init_s_fdf(char *filename, t_fdf *p_fdf)
 	if (mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->s_new_img.img_mlx, 0, 0) < 0)// test d' affichage image vide ?
 		close_program(p_fdf, "Error : mlx_put_image_to_window()");
 	init_s_projections(p_fdf, &(p_fdf->projs));
-	init_proj_map(p_fdf, p_fdf->map); //utile ? 
-	// put_view_in_img(p_fdf, &(p_fdf->s_new_img), p_fdf->map);// utile ?
+	// init_proj_map(p_fdf, p_fdf->map); //semble inutile ? 
+	// put_view_in_img(p_fdf, &(p_fdf->s_new_img), p_fdf->map);// semble inutile ?
 	return (1);
 }
 
 int main(int argc, char **argv)
 {
-	t_fdf	fdf;
+	t_fdf	*p_fdf;
 
-	ft_memset(&fdf, 0, sizeof(fdf));
+	p_fdf = ft_calloc(1, sizeof(t_fdf));
+	// ft_memset(&fdf, 0, sizeof(t_fdf));
 	
 	// fdf = (t_fdf){
     // .mlx = NULL, // Initialisez mlx avec la valeur appropriée
@@ -90,14 +91,14 @@ int main(int argc, char **argv)
     // .s_img_to_del = NULL, // Initialisez s_imgtoclean avec la valeur appropriée
     // .s_new_img = NULL, // Initialisez s_new_img avec la valeur appropriée
     // .map = NULL, // Initialisez map avec la valeur appropriée
-    // .map_data = {0, 0, 0, 0, {0, 0, 0, 0}}, // Initialisez map_data avec les valeurs appropriées
-    // .projs = {NULL, NULL}, // Initialisez projs avec les valeurs appropriées
+    // .map_data = (t_map_data) {0, 0, 0, 0, (t_map_borders) {0, 0, 0, 0}}, // Initialisez map_data avec les valeurs appropriées
+    // .projs = (t_projs) {NULL, NULL}, // Initialisez projs avec les valeurs appropriées
 	// };
 	is_error_args(argc, argv);
-	init_s_fdf(argv[1], &fdf);
-    mlx_hook(fdf.win, 17, 0, close_hook, &fdf); //bouton fermeture fenetre
-	mlx_hook(fdf.win, 2, 1L<<0, manage_keyhook, &fdf);
-	mlx_loop_hook(fdf.mlx, frame_hook, &fdf); // vraie version 
-	mlx_loop(fdf.mlx);
-	return (close_program(&fdf, NULL));
+	init_s_fdf(argv[1], p_fdf);
+    mlx_hook(p_fdf->win, 17, 0, close_hook, p_fdf); //bouton fermeture fenetre
+	mlx_hook(p_fdf->win, 2, 1L<<0, manage_keyhook, p_fdf);
+	mlx_loop_hook(p_fdf->mlx, frame_hook, p_fdf); // vraie version 
+	mlx_loop(p_fdf->mlx);//remettre
+	return (close_program(p_fdf, NULL));
 }

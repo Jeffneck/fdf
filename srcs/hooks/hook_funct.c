@@ -4,6 +4,7 @@ int close_hook(t_fdf *p_fdf)
 {
     ft_printf("hook_func : close_hook\n");
     close_program(p_fdf, NULL);
+    exit(1);
     return(1);
 }
 void rotation_hook(int keysym, t_fdf *p_fdf)

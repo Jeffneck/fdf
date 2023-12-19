@@ -1,6 +1,6 @@
 NAME = fdf
 CC = gcc
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g3  #-fsanitize=address 
 SRCS = 	srcs/main.c\
 		srcs/colors/color.c\
 		srcs/hooks/hook_funct.c\
@@ -25,10 +25,10 @@ OBJS = $(patsubst srcs/%.c,objs/%.o,$(SRCS))
 
 $(NAME) : $(OBJS) includes/fdf.h
 	make -C libft/
-# make -C minilibx-linux/
-# $(CC) $(FLAGS) $(OBJS) -g3 -I includes/ -Llibft -lft -Lminilibx-linux/ -lmlx_Linux -o $(NAME) -lX11 -lXext -lm -lmlx
-	make -C minilibx-test/
-	$(CC) $(FLAGS) $(OBJS) -g -I includes/ -Llibft -lft -Lminilibx-test/ -lmlx_Linux -o $(NAME) -lX11 -lXext -lm -lmlx
+	make -C minilibx-linux/
+	$(CC) $(FLAGS) $(OBJS) -g3 -I includes/ -Llibft -lft -Lminilibx-linux/ -lmlx_Linux -o $(NAME) -lX11 -lXext -lm -lmlx
+# make -C minilibx-test/
+# $(CC) $(FLAGS) $(OBJS) -I includes/ -Llibft -lft -Lminilibx-test/ -lmlx_Linux -o $(NAME) -lX11 -lXext -lm -lmlx
 #retirer g3 en version finale
 
 objs/%.o : srcs/%.c

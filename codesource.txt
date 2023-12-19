@@ -1,0 +1,999 @@
+#ifndef FDF_H
+# define FDF_H
+
+# include "../libft/libft.h"
+# include "../minilibx-test/mlx.h" //supprimer plus tard
+# include "../minilibx-test/mlx_int.h" //supprimer plus tard
+# include <fcntl.h>
+# include <math.h>
+# include <stdint.h> // retirable si on utilise les unsigned int plutot que uint32_t ?
+
+# ifndef WIDTH
+#  define WIDTH 1200
+# endif //WIDTH
+# ifndef HEIGHT
+#  define HEIGHT 1000
+# endif //HEIGHT
+# ifndef SCALE_FACTOR 
+#  define SCALE_FACTOR 0.85 //remplacer par 0.85
+# endif //SCALE_FACTOR
+# ifndef ENDIANESS
+#  define ENDIANESS 1
+# endif //ENDIANESS
+
+
+
+
+
+typedef struct s_map_elem
+{
+	int				x;
+	int				y;
+	int				z;
+	int				proj_x;
+	int				proj_y;
+	int				temp_z;
+	int				color;
+	int				valid;
+}	t_map_elem;
+
+typedef struct s_map_borders
+{
+	int			min_x;
+	int			min_y; 
+	int			max_x;
+	int			max_y;
+}	t_map_borders;
+
+typedef struct s_plot_utils
+{
+	int	x_diff;
+	int	y_diff;
+	int	x_step;
+	int	y_step;
+	int	decision;
+}	t_plot;
+
+typedef struct s_argb
+{
+	unsigned char	a;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+}	t_argb;
+
+typedef struct s_map_data
+{
+	int	width;
+	int	height;
+	int	center_x;
+	int	center_y;
+	t_map_borders		borders; 
+}	t_map_data;
+
+
+
+typedef struct s_proj
+{
+	t_map_borders	proj_borders; //
+	double			scale;
+	int				offset_x;
+	int				offset_y;
+	double			rot_x;
+	double			rot_y;
+	double			rot_z;
+	double			depthfactor;
+}	t_proj;
+
+typedef struct s_projs
+{
+	t_proj	current;
+	t_proj	last;
+}	t_projs;
+
+
+typedef struct s_imgstruct
+{
+	void	*img_mlx; 
+	void	*p_img_pixels;
+	int		bits_per_pixel;
+	int		endian;
+	int		line_len;
+}	t_imgstruct;
+
+typedef struct s_fdf
+{
+	void				*mlx;
+	void				*win;
+	t_imgstruct			s_img_to_del;//retirer le pointeur ??
+	t_imgstruct			s_new_img;
+	t_map_elem			**map;
+	t_map_data			map_data;
+	t_projs				projs;
+}	t_fdf;
+
+int		strhexa_to_colorint(char *strhexa);
+int		process_color(int curr_steps, int tot_steps, int color_ini, int color_end);
+
+int		is_error_args(int argc, char **argv);//
+t_imgstruct	*init_new_img(t_fdf *p_fdf);
+int		init_s_fdf(char *filename, t_fdf *p_fdf);//
+void	init_s_projections(t_fdf *p_fdf, t_projs* projs);
+
+int		manage_keyhook(int keysym, t_fdf *p_fdf);
+int		frame_hook(t_fdf *p_fdf);
+
+int		close_hook(t_fdf *p_fdf);
+void	rotation_hook(int keysym, t_fdf *p_fdf);
+void	translation_hook(int keysym, t_fdf *p_fdf);
+void	scaling_hook(int keysym, t_fdf *p_fdf);
+void	depthmodif_hook(int keysym, t_fdf *p_fdf);
+
+void    transform_proj_mapelem(t_fdf *p_fdf, t_map_elem *p_map_el, int flag);
+int     transform_base_mapelem(t_fdf *p_fdf, t_map_elem *p_map_el);
+void    put_view_in_img(t_fdf *p_fdf, t_imgstruct *p_img, t_map_elem **map); 
+
+void	apply_scaling(t_map_elem *p_map_el, t_proj proj);
+void	apply_offset(t_map_elem *p_map_el, t_proj proj);
+void	apply_depthmodif(t_map_elem *p_map_el, t_proj proj);
+
+void    apply_rot_x(t_map_elem *p_map_el, double cos_a, double sin_a);
+void	apply_rot_y(t_map_elem *p_map_el, double cos_a, double sin_a);
+void	apply_rot_z(t_map_elem *p_view_el, double cos_a, double sin_a);
+void    apply_rotation(t_map_elem *p_map_el, t_proj proj);
+
+void    put_pixel(t_imgstruct *p_img, int col, int line, int color); 
+void    plot_low_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem p1);
+void    plot_high_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem p1);
+void    init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1);
+void    plot_line(t_imgstruct *p_img, t_map_elem p0, t_map_elem p1);
+
+
+void    center_map(t_map_data md, t_map_elem **map);
+
+t_map_elem	**fill_map_elem2(char ***map_char3, t_map_elem **map_elem2);//penser a terminer chaque ligne par un NULL
+t_map_elem	**create_map_elem2(char ***map_char3);
+t_map_elem **get_map(char *filename);
+
+
+char	*get_map_in_char1(int map_fd);//
+char	**get_map_in_char2(char *map_str);//
+char	***get_map_in_char3(char **map_strs);//
+
+
+size_t	char2len(char **char2);
+size_t	char3len(char ***char3);
+
+void	free_char1(char **a_char1);
+void	free_char2(char ***a_map_el2);
+void	free_char3(char ****a_char3);
+void	free_map_elem2(t_map_elem ***a_map_el2);
+
+int exit_error(char *strerr);
+int	is_error_filename(char	*file_name);
+
+t_map_data	get_map_data(t_map_elem **map);
+void	define_scale(t_proj *p_proj, t_map_data md);
+void	define_offsets(t_proj *p_proj, t_map_data mb, double scale);
+void	init_proj_map(t_fdf *p_fdf, t_map_elem **map); //dans le main pour le moment
+
+int		close_program(t_fdf *p_fdf, char *strerr);
+void	clean_close_imgstruct(t_fdf *p_fdf, t_imgstruct *p_imgtoclear);
+void	clean_close_window(t_fdf *p_fdf, void *p_win);
+
+# endif
+# include "../../includes/fdf.h"
+
+
+int	strhexa_to_colorint(char *strhexa)
+{
+	int		i;
+
+	i = 2; 
+	if(!strhexa)
+		return (0xFFFFFFFF); //si pas de couleur de base on choisit blanc par defaut, valide le code hexa
+	if (strncmp("0x", strhexa, 2) != 0)
+		exit_error("Bad format for color");
+	while(strhexa[i] && strhexa[i] != ' ')
+	{
+		if (strhexa[i] >= 'a' && strhexa[i] <= 'f')
+			strhexa[i] -= 32;
+		i++;
+	}
+	return (ft_atoi_base(&strhexa[2], "0123456789ABCDEF", 16)); //atoi avance a l' infini ou s' arrete tt seul ?
+}
+
+t_argb create_argb(int color)
+{
+	t_argb argb;
+	int	mask;
+
+	mask = 0xFF;
+
+	argb.a = (unsigned char) (color >> 24) & mask;
+	argb.r = (unsigned char) (color >> 16) & mask;
+	argb.g = (unsigned char) (color >> 8) & mask;
+	argb.b = (unsigned char) color & mask;
+	return (argb);
+}
+
+int		create_color_gradient(float delta, t_argb color1, t_argb color2)
+{
+	t_argb new_c;
+	int		color_int;
+
+	new_c.a = (1 - delta) * color1.a + delta * color2.a; 
+	new_c.r = (1 - delta) * color1.r + delta * color2.r; 
+	new_c.g = (1 - delta) * color1.g + delta * color2.g; 
+	new_c.b = (1 - delta) * color1.b + delta * color2.b; 
+	color_int = (new_c.a << 24) + (new_c.r << 16) + (new_c.g << 8) + new_c.b; 
+	return (color_int);
+}
+
+int		process_color(int curr_steps, int tot_steps, int color_ini, int color_end)
+{
+	float	delta;
+	int c_processed; 
+	delta = (float) curr_steps / tot_steps; 
+	c_processed = create_color_gradient(delta, 
+		create_argb(color_ini), 
+		create_argb(color_end));
+	return (c_processed);
+}
+
+
+
+
+	
+
+# include "../../includes/fdf.h"
+
+int close_hook(t_fdf *p_fdf)
+{
+    ft_printf("hook_func : close_hook\n");
+    close_program(p_fdf, NULL);
+    exit(1);
+    return(1);
+}
+void rotation_hook(int keysym, t_fdf *p_fdf)
+{
+    ft_printf("hook_func : rotation_hook\n");
+    t_proj *proj;
+
+    proj = &(p_fdf->projs.current);
+    if(keysym == XK_Up)
+        proj->rot_x += 0.02;
+    else if(keysym == XK_Down)
+        proj->rot_x -= 0.02;
+    else if(keysym == XK_Left)
+        proj->rot_y += 0.02;
+    else if(keysym == XK_Right)
+        proj->rot_y -= 0.02;
+}
+void translation_hook(int keysym, t_fdf *p_fdf)
+{
+    printf("hook_func : translation_hook\n");
+    t_proj *proj;
+
+    proj = &(p_fdf->projs.current);
+    if(keysym == XK_w)
+        proj->offset_y += proj->scale / 3;
+    else if(keysym == XK_s)
+        proj->offset_y -= proj->scale / 3;
+    else if(keysym == XK_a)
+        proj->offset_x += proj->scale / 3;
+    else if(keysym == XK_d)
+        proj->offset_x -= proj->scale / 3;
+}
+void scaling_hook(int keysym, t_fdf *p_fdf)
+{
+    ft_printf("hook_func : scaling_hook\n");
+    t_proj *proj;
+
+    proj = &(p_fdf->projs.current);
+    if(keysym == XK_KP_Add)
+    {
+        if (proj->scale < 1000)
+            proj->scale += 1;
+    }
+    else if(keysym == XK_KP_Subtract)
+    {
+        if (proj->scale > 2)
+            proj->scale -= 1;
+    }
+}
+void depthmodif_hook(int keysym, t_fdf *p_fdf)
+{
+    ft_printf("hook_func : depthmodif_hook\n");
+    t_proj *proj;
+
+    proj = &(p_fdf->projs.current);
+    if(keysym == XK_1)
+        proj->depthfactor -= 0.05;
+    if(keysym == XK_2)
+        proj->depthfactor += 0.05;
+}# include "../../includes/fdf.h"
+
+int	manage_keyhook(int keysym, t_fdf *p_fdf)
+{
+	ft_printf("hooks : manage_keyhook KEYSYM = %d \n", keysym);//
+	if (keysym == XK_Escape)
+        close_hook(p_fdf); //exit ou return erreur ?
+	if (keysym == XK_Left || keysym == XK_Right || keysym == XK_Up || keysym == XK_Down)
+		rotation_hook(keysym, p_fdf);
+	else if (keysym == XK_w || keysym == XK_d || keysym == XK_s || keysym == XK_a)
+		translation_hook(keysym, p_fdf);
+	else if (keysym == XK_KP_Add || keysym == XK_KP_Subtract)
+		scaling_hook(keysym, p_fdf);
+	else if (keysym == XK_1 || keysym == XK_2)
+		depthmodif_hook(keysym, p_fdf);
+	return (1);
+	
+}
+
+int	frame_hook(t_fdf *p_fdf)
+{
+
+	if (ft_memcmp(&(p_fdf->projs.current), &(p_fdf->projs.last), sizeof(t_proj)) == 0)
+	{
+		return (0);
+	}
+	ft_memmove(&(p_fdf->s_img_to_del), &(p_fdf->s_new_img), sizeof(t_proj));//il faut garder ca pour free
+	p_fdf->s_new_img = *init_new_img(p_fdf);
+	init_proj_map(p_fdf, p_fdf->map);//ajout test
+	put_view_in_img(p_fdf, &(p_fdf->s_new_img), p_fdf->map);
+	ft_memmove(&(p_fdf->projs.last), &(p_fdf->projs.current), sizeof(t_proj));
+	mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->s_new_img.img_mlx, 0, 0);
+	clean_close_imgstruct(p_fdf, &(p_fdf->s_img_to_del));
+	return (1);
+}#include "../../includes/fdf.h"
+
+void    center_map(t_map_data md, t_map_elem **map)
+{
+    size_t  i;
+    size_t  j;
+
+    i = 0;
+    while(map[i])
+    {
+        j = 0;
+        while(map[i][j].valid)
+        {
+            map[i][j].x -= md.center_x;
+            map[i][j].y -= md.center_y;
+            j++;
+        }
+        i++;
+    }
+    ft_printf("center map : center_map offset center x = %d offset center y = %d\n", md.center_x, md.center_y);//
+}#include "../../includes/fdf.h"
+
+
+char	*get_map_in_char1(int map_fd)
+{
+	char *map_str;
+	char *gnl_tmp;
+	char *map_tmp;
+
+	gnl_tmp = get_next_line(map_fd);
+	if (!gnl_tmp)
+		return (NULL);
+	map_str = ft_strdup("");
+	if (!map_str)
+		return (free(gnl_tmp), NULL);
+	while(gnl_tmp)
+	{
+		map_tmp = ft_strjoin(map_str, gnl_tmp);
+		if (!map_tmp) //necess ?
+			return (free_char1(&map_str), free_char1(&gnl_tmp), NULL);
+		free_char1(&gnl_tmp);
+		free_char1(&map_str);
+		map_str = map_tmp;
+		gnl_tmp = get_next_line(map_fd);
+	}	
+	free_char1(&gnl_tmp);
+	return (map_str);
+}
+
+
+char	**get_map_in_char2(char *map_str)
+{
+	char **map_strs;
+
+	if (!map_str)
+		return (NULL);
+	map_strs = ft_split(map_str, '\n');
+	free(map_str);
+	return (map_strs);
+}
+
+
+char	***get_map_in_char3(char **map_strs)
+{
+	size_t i;
+	char	***map_char3;
+
+	if (!map_strs)
+		return (NULL);
+	map_char3 = (char ***) ft_calloc(char2len(map_strs) + 1, sizeof(char **));
+	if(!map_char3)
+		return(free_char2(&map_strs), NULL);
+	i = 0;
+	while (map_strs[i])
+	{
+		map_char3[i] = ft_split(map_strs[i], ' ');
+		if (!map_char3[i])
+			return (free_char2(&map_strs), free_char3(&map_char3), NULL);
+		i++;
+	}
+	return (free_char2(&map_strs), map_char3);
+}
+
+#include "../../includes/fdf.h"
+
+t_map_elem	**fill_map_elem2(char ***map_char3, t_map_elem **map_elem2)
+{
+	size_t	i;
+	size_t	j;
+	char	**el_split;
+
+	i = 0;
+	el_split = NULL;
+	while (map_char3[i])
+	{
+		j = 0;
+		while (map_char3[i][j])
+		{
+			el_split = ft_split(map_char3[i][j], ',');
+			if (!el_split)
+				return (free_char3(&map_char3), free_map_elem2(&map_elem2), NULL);
+			map_elem2[i][j] = (t_map_elem) {j, i, ft_atoi(el_split[0]), 0, 0, ft_atoi(el_split[0]), strhexa_to_colorint(el_split[1]), 1};
+			free_char2(&el_split);
+			j++;
+		}
+		map_elem2[i][j].valid = 0; //inutile car deja a 0 ?
+		i++;
+	}
+	return(free_char3(&map_char3), map_elem2);
+}
+
+
+t_map_elem	**create_map_elem2(char ***map_char3)
+{
+	size_t i;
+	t_map_elem **map_elem2;
+
+	i = 0;
+	if (!map_char3)
+		return (NULL);
+	map_elem2 = (t_map_elem **) ft_calloc(char3len(map_char3) + 1, sizeof(t_map_elem *));
+	if (!map_elem2)
+		return (free_char3(&map_char3), NULL);
+	while (map_char3[i])
+	{
+		map_elem2[i] = (t_map_elem *) ft_calloc(char2len(map_char3[i]) + 1, sizeof(t_map_elem));
+		if (!map_elem2[i])
+			return(free_map_elem2(&map_elem2), free_char3(&map_char3), NULL);
+		i++;
+	}
+	return (fill_map_elem2(map_char3, map_elem2));
+}
+
+
+t_map_elem **get_map(char *filename)
+{	
+	int			fd;
+	char		***map_char3;
+
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		return (ft_printf("open a echoue, avec filename = %s\n", filename), NULL);//revoir la gestion d'erreur
+	map_char3 = get_map_in_char3(get_map_in_char2(get_map_in_char1(fd)));
+	return (create_map_elem2(map_char3));
+
+}
+
+
+
+void    apply_rot_x(t_map_elem *p_map_el, double cos_a, double sin_a)
+{
+    int old_y;
+    int old_z; 
+
+    old_y = p_map_el->proj_y;
+    old_z = p_map_el->temp_z;
+    p_map_el->proj_y = old_y * cos_a + old_z * sin_a;
+    p_map_el->temp_z = old_y * (-sin_a) + old_z * cos_a; //est ce reellement utile
+}
+
+void    apply_rot_y(t_map_elem *p_map_el, double cos_a, double sin_a)
+{
+    int old_x;
+    int old_z;
+
+    old_x = p_map_el->proj_x;
+    old_z = p_map_el->temp_z;
+    p_map_el->proj_x = old_x * cos_a + old_z * (-sin_a);
+    p_map_el->temp_z = old_x * sin_a + old_z * cos_a;
+}
+
+void    apply_rot_z(t_map_elem *p_map_el, double cos_a, double sin_a)
+{
+    int old_x;
+    int old_y;
+
+    old_x = p_map_el->proj_x;
+    old_y = p_map_el->proj_y;
+    p_map_el->proj_x = old_x * cos_a + old_y * sin_a;
+    p_map_el->proj_y = old_x * (-sin_a) + old_y * cos_a;
+
+}
+
+
+
+
+
+
+
+
+void    apply_rotation(t_map_elem *p_map_el, t_proj proj)
+{
+    apply_rot_x(p_map_el, (double)cos(proj.rot_x), (double)sin(proj.rot_x));
+    apply_rot_y(p_map_el, (double)cos(proj.rot_y), (double)sin(proj.rot_y));
+    apply_rot_z(p_map_el, (double)cos(proj.rot_z), (double)sin(proj.rot_z));
+}# include "../../includes/fdf.h"
+
+void    apply_scaling(t_map_elem *p_map_el, t_proj current)
+{
+    p_map_el->proj_x = p_map_el->x * ceil(current.scale); // ceil == test proj_x au lieu de x  = test 
+    p_map_el->proj_y = p_map_el->y * ceil(current.scale);
+    p_map_el->temp_z = p_map_el->z * 0.15 * current.scale * current.depthfactor;//
+}
+
+void    apply_offset(t_map_elem *p_map_el, t_proj current)
+{
+    p_map_el->proj_x = p_map_el->proj_x + current.offset_x;
+    p_map_el->proj_y = p_map_el->proj_y + current.offset_y;
+
+}
+
+
+void    put_pixel(t_imgstruct *p_img, int col, int line, int color) //il faut surement envoyer *p_img 
+{
+    int offset;
+
+    offset = (p_img->line_len * line) + (p_img->bits_per_pixel * col / 8);
+    if (col >= 0 && col < WIDTH && line >= 0 && line < HEIGHT)
+        *((int *)(p_img->p_img_pixels + offset)) = color; 
+}
+
+void    plot_low_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem p1)
+{
+    int nb_steps;
+    int gradient;
+
+    nb_steps = 0;
+    while (p0.proj_x != p1.proj_x)//erreur dans la condition ? 
+    {
+        if (p0.color != p1.color)
+            gradient = process_color(nb_steps, plt.x_diff, p0.color, p1.color);
+        else
+            gradient = p0.color;
+        if (p0.proj_x >= 0 && p0.proj_x < WIDTH && p0.proj_y >= 0 && p0.proj_y < HEIGHT) 
+            put_pixel(p_img, p0.proj_x, p0.proj_y, gradient); //vraie commande a garder
+        p0.proj_x += plt.x_step;
+        if (plt.decision <= 0)
+            plt.decision += 2 * plt.y_diff;
+        else
+        {
+            p0.proj_y += plt.y_step;
+            plt.decision += 2 * (plt.y_diff - plt.x_diff);
+        }
+        nb_steps++;
+    }
+}
+
+void    plot_high_slope(t_imgstruct *p_img, t_plot plt, t_map_elem p0, t_map_elem p1)
+{
+    int nb_steps;
+    int gradient;
+
+    nb_steps = 0;
+    while (p0.proj_y != p1.proj_y) // <= ne marche pas si on fait -1 
+    {
+        if (p0.color != p1.color)
+            gradient = process_color(nb_steps, plt.y_diff, p0.color, p1.color);
+        else
+            gradient = p0.color;
+        if (p0.proj_x >= 0 && p0.proj_x < WIDTH && p0.proj_y >= 0 && p0.proj_y < HEIGHT) //mettre ca dans put pixel
+            put_pixel(p_img, p0.proj_x, p0.proj_y, gradient);
+        p0.proj_y += plt.y_step;
+        if (plt.decision <= 0)
+            plt.decision += 2 * plt.x_diff;
+        else
+        {
+            p0.proj_x += plt.x_step;
+            plt.decision += 2 * (plt.x_diff - plt.y_diff);
+        }
+        nb_steps++;
+    }
+}
+
+void    init_ploting_utils(t_plot *p_plt, t_map_elem p0, t_map_elem p1)
+{
+    p_plt->x_diff = abs(p1.proj_x - p0.proj_x);
+    p_plt->y_diff = abs(p1.proj_y - p0.proj_y);
+    if (p1.proj_x > p0.proj_x)
+        p_plt->x_step = 1;
+    else
+        p_plt->x_step = -1;
+    if (p1.proj_y > p0.proj_y)
+        p_plt->y_step = 1;
+    else
+        p_plt->y_step = -1;
+}
+void    plot_line(t_imgstruct *p_img, t_map_elem p0, t_map_elem p1)
+{
+    t_plot plt;
+
+    init_ploting_utils(&plt, p0, p1);
+    if (plt.x_diff >= plt.y_diff)
+    {
+        plt.decision = 2 * plt.y_diff - plt.x_diff;
+        plot_low_slope(p_img, plt, p0, p1);
+    }
+    else
+    {
+        plt.decision = 2 * plt.x_diff - plt.y_diff;
+        plot_high_slope(p_img, plt, p0, p1);   
+    }
+}# include "../../includes/fdf.h"
+
+void    transform_proj_mapelem(t_fdf *p_fdf, t_map_elem *p_map_el, int flag)
+{
+    t_proj current; 
+    t_proj  last;
+
+    current = p_fdf->projs.current;
+    last = p_fdf->projs.last;
+    apply_scaling(p_map_el, current);
+    apply_rotation(p_map_el, current);//test
+    apply_offset(p_map_el, current);
+    flag = flag + 1; //test
+    last = last; //test
+    
+}
+
+
+
+void    init_proj_map(t_fdf *p_fdf, t_map_elem **map)
+{
+	ft_printf("main: init proj map\n");//
+    size_t  i; 
+    size_t  j;
+    int     modif_flag;
+    modif_flag = 1; //toujours active
+    i = 0;
+    while (map[i])
+    {
+        j = 0; 
+        while (map[i][j].valid)
+        {
+            transform_proj_mapelem(p_fdf, &map[i][j], modif_flag); 
+            j++;
+        }
+        i++;
+    }
+}
+
+void    put_view_in_img(t_fdf *p_fdf, t_imgstruct *p_img, t_map_elem **map)
+{
+	ft_printf("render_img : put_view_in_img\n");//
+    size_t  i; 
+    size_t  j;
+    p_fdf = p_fdf + 1; //test
+    i = 0;
+    while (map[i])
+    {
+        j = 0; 
+        while (map[i][j].valid)
+        {
+            if (map[i][j + 1].valid)
+                plot_line(p_img, map[i][j], map[i][j + 1]);
+            if (map[i + 1])
+            {
+                if (map[i + 1][j].valid)
+                    plot_line(p_img, map[i][j], map[i + 1][j]);
+                if(map[i + 1][j + 1].valid)
+                    plot_line(p_img,map[i][j], map[i + 1][j + 1]);
+            }
+            j++;
+        }
+        i++;
+    }
+
+}# include "../../includes/fdf.h"
+
+int close_program(t_fdf *p_fdf, char *strerr)
+{
+	ft_printf("closing_utils : close_program\n");//
+	if (!p_fdf->mlx)
+		exit_error(strerr);
+	if (&(p_fdf->s_img_to_del))
+	{
+		ft_printf("closing_utils : close_program\n");//
+		clean_close_imgstruct(p_fdf, &(p_fdf->s_img_to_del)); //attention segfault on dirait que l' img a deja ete close avant d' arriver ici
+	}
+	if (&(p_fdf->s_new_img))
+		clean_close_imgstruct(p_fdf, &(p_fdf->s_new_img));//logiquement devrait rester
+	free_map_elem2(&(p_fdf->map)); // liberer + NULL t_map_elem
+	mlx_loop_end(p_fdf->mlx);//test
+    mlx_destroy_display(p_fdf->mlx);
+    free(p_fdf->mlx);
+	free(p_fdf);
+	if(strerr)
+		exit_error(strerr);
+    exit(EXIT_SUCCESS);
+}
+
+void	clean_close_imgstruct(t_fdf *p_fdf, t_imgstruct *p_img)
+{
+	ft_printf("closing_utils : close_imgstruct\n");//
+	
+	if (p_img->img_mlx)
+		mlx_destroy_image(p_fdf->mlx, p_img->img_mlx);
+	free(p_img);//erreur ?
+	p_img = NULL;
+}
+
+void	clean_close_window(t_fdf *p_fdf, void *p_win)
+{
+	ft_printf("closing_utils : close_windows\n");//
+	if (p_win)
+		mlx_destroy_window(p_fdf->mlx, p_win);
+}#include "../../includes/fdf.h"
+
+
+
+int exit_error(char *strerr)
+{
+	ft_putstr_fd(strerr, 2);
+	exit(EXIT_FAILURE);
+}
+
+int	is_error_filename(char	*file_name)
+{
+	size_t	file_name_len;
+
+	file_name_len = ft_strlen(file_name);
+	if (file_name_len < 4)
+		return (1);
+	if (ft_strncmp(&file_name[file_name_len - 4], ".fdf", 4))
+		return (1);
+	return (0);
+}#include "../../includes/fdf.h"
+
+void	free_char1(char **a_char1)
+{
+	free(*a_char1);
+	*a_char1 = NULL;
+}
+
+void	free_char2(char ***a_map_el2)
+{
+	size_t	i;
+	char	**char2;
+
+	i = 0;
+	char2 = *a_map_el2;
+	while (char2[i])
+	{
+		free(char2[i]);
+		char2[i] = NULL;
+		i++;
+	}
+	free(char2);
+	char2 = NULL;
+}
+
+void	free_char3(char ****a_char3)
+{
+	size_t	i;
+	char	***char3;
+
+	i = 0;
+	char3 = *a_char3;
+	while (char3[i])
+	{
+		free_char2(&char3[i]);
+		char3[i] = NULL;
+		i++;
+	}
+	free(char3);
+	char3 = NULL;
+}
+
+void	free_map_elem2(t_map_elem ***a_map_el2)
+{
+	size_t	i;
+	t_map_elem	**map_el2;
+
+	i = 0;
+	map_el2 = *a_map_el2;
+	while (map_el2[i])
+	{
+		free(map_el2[i]);
+		map_el2[i] = NULL;
+		i++;
+	}
+	free(map_el2);
+	map_el2 = NULL;
+}#include "../../includes/fdf.h"
+
+size_t	char2len(char **char2)
+{
+	size_t	i; 
+
+	i = 0;
+	while (char2[i])
+		i++;
+	return (i);
+}
+
+size_t	char3len(char ***char3)
+{
+	size_t	i; 
+
+	i = 0;
+	while (char3[i])
+		i++;
+	return (i);
+}#include "../../includes/fdf.h"
+
+
+
+
+
+t_map_data	get_map_data(t_map_elem **map)
+{
+	size_t			i; 
+	size_t			j;
+	t_map_data		md;
+
+	i = 0;
+	md.borders = (t_map_borders) {map[0][0].x, map[0][0].x, map[0][0].y, map[0][0].y};
+	while(map[i])
+	{
+		j = 0; 
+		while (map[i][j].valid != 0)
+		{
+			if ((int) floor(map[i][j].x) < md.borders.min_x)
+				md.borders.min_x = (int) floor(map[i][j].x);
+			else if ((int) ceil(map[i][j].x) > md.borders.max_x)
+				md.borders.max_x = (int) ceil(map[i][j].x);
+			if ((int) floor(map[i][j].y) < md.borders.min_y)
+				md.borders.min_y = (int) floor(map[i][j].y);
+			else if ((int) ceil(map[i][j].y) > md.borders.max_y)
+				md.borders.max_y = (int) ceil(map[i][j].y);
+			j++;
+		}
+		i++;
+	}
+	md.width = j; //+1 ou -1 ??
+	md.height = i; //+1 ou -1 ??
+	md.center_x = md.width / 2;
+    md.center_y = md.height / 2;
+	ft_printf(" projection_utils : map data md.width = %d, md.height=%d, md.center_x = %d, md.center_y = %d\n", md.width, md.height, md.center_x, md.center_y);//
+	return (md);
+}
+
+
+
+void	define_scale(t_proj *p_proj, t_map_data	md) 
+{
+	double scale_x;
+	double scale_y;
+
+	scale_x = SCALE_FACTOR * WIDTH / (md.width);
+	scale_y = SCALE_FACTOR * HEIGHT / (md.height);
+	if (scale_x < scale_y)
+		p_proj->scale = scale_x;
+	else
+		p_proj->scale = scale_y;
+	printf("projection utils : define_scale => scale finale = %f\n", p_proj->scale);//
+
+}
+
+void	define_offsets(t_proj *p_proj, t_map_data md, double scale)
+{
+	p_proj->offset_x = md.center_x * scale + round((WIDTH - (scale * md.width)) / 2);
+	p_proj->offset_y = md.center_y * scale + round((HEIGHT - (scale * md.height)) / 2);
+	
+	ft_printf("projection utils :define offset offsetx = %d offsety = %d md_centerx = %d md_centery = %d\n", p_proj->offset_x, p_proj->offset_x, md.center_x, md.center_y);
+}/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/28 15:33:53 by hanglade          #+#    #+#             */
+/*   Updated: 2023/12/19 15:39:48 by hanglade         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+# include "../includes/fdf.h"
+
+int	is_error_args(int argc, char **argv)
+{
+	ft_printf("main : is_error_args\n");//
+	if (argc != 2)
+		exit_error("Usage: ./fdf <map_path>\n");
+	if (is_error_filename(argv[1]))
+		exit_error("Invalid filename.\n");
+	return (0);
+}
+
+t_imgstruct	*init_new_img(t_fdf *p_fdf)
+{
+	t_imgstruct *img;
+
+	img = ft_calloc(1, sizeof(t_imgstruct));
+	img->img_mlx = mlx_new_image(p_fdf->mlx, WIDTH, HEIGHT); 
+	if (!img->img_mlx)
+		close_program(p_fdf, "Error : mlx_new_image()");//bien fermer la seconde image lors de close
+	img->p_img_pixels = mlx_get_data_addr(img->img_mlx, &(img->bits_per_pixel), &(img->line_len), &(img->endian));
+	if (!img->p_img_pixels) ////si get data address ne produit pas d'erreurs cette verif est inutile
+		close_program(p_fdf, "Error : mlx_new_image()");
+	return (img);
+}
+
+void	init_s_projections(t_fdf *p_fdf, t_projs* projs)
+{
+	ft_printf("main : init_s_projection\n");//
+	
+	ft_printf("main : init_s_projection\n");//
+	define_scale(&(projs->current), p_fdf->map_data);
+	ft_printf("main : init_s_projection\n");//
+	define_offsets(&(projs->current), p_fdf->map_data, projs->current.scale);
+	projs->current.rot_x = -0.52;//verifier les valeurs de rot
+	projs->current.rot_y = 0.52; 
+	projs->current.rot_z = 0;
+	projs->current.depthfactor = 1;
+	ft_printf("main : init_s_projection\n");//
+}
+
+int	init_s_fdf(char *filename, t_fdf *p_fdf)
+{
+	ft_printf("main : init_s_fdf\n");//
+	p_fdf->map = get_map(filename);
+	if (!p_fdf->map)
+		close_program(p_fdf, "Error : get_map()");
+	p_fdf->map_data = get_map_data(p_fdf->map);
+	center_map(p_fdf->map_data, p_fdf->map);
+	p_fdf->mlx = mlx_init();
+	if (!p_fdf->mlx)
+		close_program(p_fdf, "Error : mlx_init()");
+	p_fdf->win = mlx_new_window(p_fdf->mlx, WIDTH, HEIGHT, "Fdf");
+	if (!p_fdf->win)
+		close_program(p_fdf, "Error : mlx_new_window()");
+	p_fdf->s_new_img = *init_new_img(p_fdf);
+	if (mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->s_new_img.img_mlx, 0, 0) < 0)// test d' affichage image vide ?
+		close_program(p_fdf, "Error : mlx_put_image_to_window()");
+	init_s_projections(p_fdf, &(p_fdf->projs));
+	return (1);
+}
+
+int main(int argc, char **argv)
+{
+	t_fdf	*p_fdf;
+
+	p_fdf = ft_calloc(1, sizeof(t_fdf));
+	
+	is_error_args(argc, argv);
+	init_s_fdf(argv[1], p_fdf);
+    mlx_hook(p_fdf->win, 17, 0, close_hook, p_fdf); //bouton fermeture fenetre
+	mlx_hook(p_fdf->win, 2, 1L<<0, manage_keyhook, p_fdf);
+	mlx_loop_hook(p_fdf->mlx, frame_hook, p_fdf); // vraie version 
+	return (close_program(p_fdf, NULL));
+}
