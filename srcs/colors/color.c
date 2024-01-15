@@ -31,7 +31,7 @@ t_argb create_argb(int color)
 	argb.r = (unsigned char) (color >> 16) & mask;
 	argb.g = (unsigned char) (color >> 8) & mask;
 	argb.b = (unsigned char) color & mask;
-	return (argb);
+	return (argb);git 
 }
 
 int		create_color_gradient(float delta, t_argb color1, t_argb color2)
