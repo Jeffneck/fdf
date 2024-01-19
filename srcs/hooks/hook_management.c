@@ -5,7 +5,7 @@ int	manage_keyhook(int keysym, t_fdf *p_fdf)
 	ft_printf("hooks : manage_keyhook KEYSYM = %d \n", keysym);//
 	if (keysym == XK_Escape)
         close_hook(p_fdf); //exit ou return erreur ?
-	if (keysym == XK_Left || keysym == XK_Right || keysym == XK_Up || keysym == XK_Down)
+	if (keysym == XK_Left || keysym == XK_Right || keysym == XK_Up || keysym == XK_Down || keysym == XK_0)
 		rotation_hook(keysym, p_fdf);
 	else if (keysym == XK_w || keysym == XK_d || keysym == XK_s || keysym == XK_a)
 		translation_hook(keysym, p_fdf);

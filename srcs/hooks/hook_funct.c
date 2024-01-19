@@ -22,6 +22,11 @@ void rotation_hook(int keysym, t_fdf *p_fdf)
         proj->rot_y += 0.02;
     else if(keysym == XK_Right)
         proj->rot_y -= 0.02;
+    else if(keysym == XK_0) //remettre en vue 2D ====modifier !!!!
+    {
+        proj->rot_y = 0;
+        proj->rot_x = 0;
+    }
 }
 void translation_hook(int keysym, t_fdf *p_fdf)
 {
