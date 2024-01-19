@@ -28,13 +28,15 @@ int	frame_hook(t_fdf *p_fdf)
 	}
 	// p_fdf->s_imgtoclean = p_fdf->s_new_img;
 	ft_memmove(&(p_fdf->s_img_to_del), &(p_fdf->s_new_img), sizeof(t_proj));//il faut garder ca pour free
-	p_fdf->s_new_img = *init_new_img(p_fdf);
+	p_fdf->s_new_img = init_new_img(p_fdf);
 	init_proj_map(p_fdf, p_fdf->map);//ajout test
 	put_view_in_img(p_fdf, &(p_fdf->s_new_img), p_fdf->map);
 	// ft_printf("hooks : frame_hook\n");//
 	ft_memmove(&(p_fdf->projs.last), &(p_fdf->projs.current), sizeof(t_proj));
 	// ft_printf("hooks : frame_hook before image put window\n");
 	mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->s_new_img.img_mlx, 0, 0);
+	// if (p_fdf->s_img_to_del.img_mlx)
+	// 	mlx_destroy_image(p_fdf->mlx, p_fdf->s_img_to_del.img_mlx);
 	clean_close_imgstruct(p_fdf, &(p_fdf->s_img_to_del));
 	// ft_printf("hooks : frame_hook sortie\n");
 	return (1);

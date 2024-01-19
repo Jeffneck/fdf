@@ -147,7 +147,7 @@ int		process_color(int curr_steps, int tot_steps, int color_ini, int color_end);
 
 //*****************MAIN
 int		is_error_args(int argc, char **argv);//
-t_imgstruct	*init_new_img(t_fdf *p_fdf);
+t_imgstruct	init_new_img(t_fdf *p_fdf);
 int		init_s_fdf(char *filename, t_fdf *p_fdf);//
 void	init_s_projections(t_fdf *p_fdf, t_projs* projs);
 
