@@ -73,8 +73,6 @@ int	init_s_fdf(char *filename, t_fdf *p_fdf)
 	if (mlx_put_image_to_window(p_fdf->mlx, p_fdf->win, p_fdf->s_new_img.img_mlx, 0, 0) < 0)// test d' affichage image vide ?
 		close_program(p_fdf, "Error : mlx_put_image_to_window()");
 	init_s_projections(p_fdf, &(p_fdf->projs));
-	// init_proj_map(p_fdf, p_fdf->map); //semble inutile ? 
-	// put_view_in_img(p_fdf, &(p_fdf->s_new_img), p_fdf->map);// semble inutile ?
 	return (1);
 }
 

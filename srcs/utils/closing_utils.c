@@ -5,12 +5,12 @@ int close_program(t_fdf *p_fdf, char *strerr)
 	ft_printf("closing_utils : close_program\n");//
 	if (!p_fdf->mlx)
 		exit_error(strerr);
-	if (&(p_fdf->s_img_to_del))
+	if (&(p_fdf->s_img_to_del.img_mlx))
 	{
 		ft_printf("closing_utils : close_program\n");//
 		clean_close_imgstruct(p_fdf, &(p_fdf->s_img_to_del)); //attention segfault on dirait que l' img a deja ete close avant d' arriver ici
 	}
-	if (&(p_fdf->s_new_img))
+	if (&(p_fdf->s_new_img.img_mlx))
 		clean_close_imgstruct(p_fdf, &(p_fdf->s_new_img));//logiquement devrait rester
 	// if (&(p_fdf->s_new_img))
 	// 	clean_close_window(p_fdf->mlx, p_fdf->win); //necessaire mais cree une segfault 
@@ -33,7 +33,7 @@ void	clean_close_imgstruct(t_fdf *p_fdf, t_imgstruct *p_img)
 	if (p_img->img_mlx)
 		mlx_destroy_image(p_fdf->mlx, p_img->img_mlx);
 	//free(p_img);//erreur ?
-	p_img = NULL;
+	p_img->img_mlx = NULL;
 }
 
 void	clean_close_window(t_fdf *p_fdf, void *p_win)

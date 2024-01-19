@@ -1,6 +1,11 @@
 NAME = fdf
+
 CC = gcc
+
 FLAGS = -Wall -Wextra -Werror -g3  #-fsanitize=address 
+
+LIB	= libft/libft.a
+
 SRCS = 	srcs/main.c\
 		srcs/colors/color.c\
 		srcs/hooks/hook_funct.c\
@@ -23,17 +28,22 @@ SRCS = 	srcs/main.c\
 OBJS = $(patsubst srcs/%.c,objs/%.o,$(SRCS))
 #.SILENT ?
 
-$(NAME) : $(OBJS) includes/fdf.h
-	make -C libft/
-	make -C minilibx-linux/
-	$(CC) $(FLAGS) $(OBJS) -g3 -I includes/ -Llibft -lft -Lminilibx-linux/ -lmlx_Linux -o $(NAME) -lX11 -lXext -lm -lmlx
-# make -C minilibx-test/
-# $(CC) $(FLAGS) $(OBJS) -I includes/ -Llibft -lft -Lminilibx-test/ -lmlx_Linux -o $(NAME) -lX11 -lXext -lm -lmlx
+$(NAME) : $(OBJS) $(LIB) includes/fdf.h
+	make -C minilibx-test/
+	$(CC) $(FLAGS) $(OBJS) -I includes/ -Llibft -lft -Lminilibx-test/ -lmlx_Linux -o $(NAME) -lX11 -lXext -lm -lmlx
+# make -C minilibx-linux/
+# $(CC) $(FLAGS) $(OBJS) -g3 -I includes/ -Llibft -lft -Lminilibx-linux/ -lmlx_Linux -o $(NAME) -lX11 -lXext -lm -lmlx
 #retirer g3 en version finale
 
 objs/%.o : srcs/%.c
 	mkdir -p $(dir $@)
 	$(CC) $(FLAGS) -c $< -o $@
+
+
+$(LIB) :	force
+	make -C libft
+
+force :
 
 all : $(NAME)
 
@@ -46,5 +56,5 @@ fclean : clean
 	make -C libft/ fclean
 re : fclean all
 test : re
-	./fdf
-.PHONY : clean fclean re all test
+	./fdf 2-2.fdf
+.PHONY : clean fclean re all test force
