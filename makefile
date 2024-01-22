@@ -2,7 +2,7 @@ NAME = fdf
 
 CC = gcc
 
-FLAGS = -Wall -Wextra -Werror -g3  #-fsanitize=address 
+FLAGS = -Wall -Wextra -Werror 
 
 LIB	= libft/libft.a
 
@@ -22,23 +22,18 @@ SRCS = 	srcs/main.c\
 		srcs/utils/free_utils.c\
 		srcs/utils/length_utils.c\
 		srcs/utils/projection_utils.c\
-# srcs/colors/color_gradiant.c
 
 
 OBJS = $(patsubst srcs/%.c,objs/%.o,$(SRCS))
-#.SILENT ?
+
 
 $(NAME) : $(OBJS) $(LIB) includes/fdf.h
 	make -C minilibx-test/
 	$(CC) $(FLAGS) $(OBJS) -I includes/ -Llibft -lft -Lminilibx-test/ -lmlx_Linux -o $(NAME) -lX11 -lXext -lm -lmlx
-# make -C minilibx-linux/
-# $(CC) $(FLAGS) $(OBJS) -g3 -I includes/ -Llibft -lft -Lminilibx-linux/ -lmlx_Linux -o $(NAME) -lX11 -lXext -lm -lmlx
-#retirer g3 en version finale
 
 objs/%.o : srcs/%.c
 	mkdir -p $(dir $@)
 	$(CC) $(FLAGS) -c $< -o $@
-
 
 $(LIB) :	force
 	make -C libft
@@ -54,7 +49,7 @@ clean :
 fclean : clean
 	rm -f $(NAME)
 	make -C libft/ fclean
+
 re : fclean all
-test : re
-	./fdf 2-2.fdf
+
 .PHONY : clean fclean re all test force

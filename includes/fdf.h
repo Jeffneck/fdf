@@ -155,6 +155,7 @@ void	init_s_projections(t_fdf *p_fdf, t_projs* projs);
 //hook_management
 int		manage_keyhook(int keysym, t_fdf *p_fdf);
 int		frame_hook(t_fdf *p_fdf);
+void	modify_projection_hook(int keysym, t_fdf *p_fdf);
 
 //hook_functions
 int		close_hook(t_fdf *p_fdf);

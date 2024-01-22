@@ -1,12 +1,40 @@
 # include "../../includes/fdf.h"
 
+void modify_projection_hook(int keysym, t_fdf *p_fdf)
+{
+    t_proj *proj;
+
+    proj = &(p_fdf->projs.current);
+    if(keysym == XK_0)
+    {
+        proj->rot_y = 0;
+        proj->rot_x = 0;
+	    proj->rot_z = 0;
+    }
+    else if(keysym == XK_9)
+    {
+	    proj->rot_x = -0.52;
+	    proj->rot_y = 0.52;
+	    proj->rot_z = 0;
+    }
+
+    else if(keysym == XK_8)
+    {
+	    proj->rot_x = -1;
+	    proj->rot_y = 0;
+	    proj->rot_z = 0;
+    }
+}
+
 int	manage_keyhook(int keysym, t_fdf *p_fdf)
 {
 	ft_printf("hooks : manage_keyhook KEYSYM = %d \n", keysym);//
 	if (keysym == XK_Escape)
         close_hook(p_fdf); //exit ou return erreur ?
-	if (keysym == XK_Left || keysym == XK_Right || keysym == XK_Up || keysym == XK_Down || keysym == XK_0)
+	else if (keysym == XK_Left || keysym == XK_Right || keysym == XK_Up || keysym == XK_Down)
 		rotation_hook(keysym, p_fdf);
+	else if (keysym == XK_0 || keysym == XK_9 || keysym == XK_8)
+		modify_projection_hook(keysym, p_fdf);
 	else if (keysym == XK_w || keysym == XK_d || keysym == XK_s || keysym == XK_a)
 		translation_hook(keysym, p_fdf);
 	else if (keysym == XK_KP_Add || keysym == XK_KP_Subtract)
