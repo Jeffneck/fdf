@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/22 16:02:36 by hanglade          #+#    #+#             */
+/*   Updated: 2024/01/22 16:03:12 by hanglade         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/fdf.h"
 
 void	free_char1(char **a_char1)
@@ -42,7 +54,7 @@ void	free_char3(char ****a_char3)
 
 void	free_map_elem2(t_map_elem ***a_map_el2)
 {
-	size_t	i;
+	size_t		i;
 	t_map_elem	**map_el2;
 
 	i = 0;

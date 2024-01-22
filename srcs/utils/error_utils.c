@@ -1,8 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/22 16:01:55 by hanglade          #+#    #+#             */
+/*   Updated: 2024/01/22 16:02:17 by hanglade         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/fdf.h"
 
-
-
-int exit_error(char *strerr)
+int	exit_error(char *strerr)
 {
 	ft_putstr_fd(strerr, 2);
 	exit(EXIT_FAILURE);
