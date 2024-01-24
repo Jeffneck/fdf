@@ -1,19 +1,75 @@
-SRCS	= 	ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c ft_isascii.c\
-			ft_isdigit.c ft_isprint.c ft_memchr.c ft_memcmp.c ft_toupper.c ft_memcpy.c\
-			ft_memmove.c ft_memset.c ft_split.c ft_strchr.c ft_strdup.c ft_strjoin.c\
-			ft_strlcat.c ft_strlcpy.c ft_strlen.c ft_strncmp.c ft_strnstr.c ft_strrchr.c\
-			ft_strtrim.c ft_substr.c ft_tolower.c ft_itoa.c ft_putchar_fd.c ft_putendl_fd.c\
-			ft_putnbr_fd.c ft_putstr_fd.c ft_striteri.c ft_strmapi.c\
-			ft_printf_utils.c ft_printf_utils_2.c ft_printf.c\
-			get_next_line_utils.c get_next_line.c\
-			ft_atoi_base.c\
+SRCS	=	\
+			file/ft_putchar_fd.c \
+			file/ft_putendl_fd.c \
+			file/ft_putnbr_fd.c \
+			file/ft_putstr_fd.c \
+			\
+			strs/char2dup.c \
+			strs/char2len.c \
+			strs/free_char2.c \
+			strs/ft_putchar2_endl.c\
+			\
+			lst/ft_lstadd_back.c\
+			lst/ft_lstadd_front.c\
+			lst/ft_lstclear.c\
+			lst/ft_lstdelone.c\
+			lst/ft_lstiter.c\
+			lst/ft_lstlast.c\
+			lst/ft_lstmap.c\
+			lst/ft_lstnew.c\
+			lst/ft_lstsize.c\
+			\
+			mem/ft_memset.c\
+			mem/ft_bzero.c\
+			mem/ft_calloc.c\
+			mem/ft_memchr.c\
+			mem/ft_memcmp.c\
+			mem/ft_memcpy.c\
+			mem/ft_memmove.c\
+			\
+			nbr/ft_atoi.c\
+			nbr/ft_atol.c\
+			nbr/ft_atoi_base.c\
+			nbr/ft_itoa.c\
+			\
+			others/ft_isprint.c\
+			others/ft_isspace.c\
+			others/ft_isdigit.c\
+			others/ft_isalnum.c\
+			others/ft_isalpha.c\
+			others/ft_isascii.c\
+			others/ft_issign.c\
+			\
+			str/ft_strjoin.c \
+			str/ft_strdup.c\
+			str/ft_tolower.c \
+			str/ft_strtrim.c \
+			str/ft_strlcat.c \
+			str/ft_substr.c \
+			str/ft_strlcpy.c \
+			str/ft_strlen.c\
+			str/ft_toupper.c \
+			str/ft_strmapi.c \
+			str/ft_split.c \
+			str/ft_strncmp.c \
+			str/ft_strchr.c\
+			str/ft_strnstr.c \
+			str/ft_strrchr.c \
+			str/ft_striteri.c \
+			str/ft_strcmp.c \
+			str/ft_strcat.c\
+			\
+			gnl/get_next_line.c\
+			gnl/get_next_line_utils.c\
+			\
+			printf/ft_printf.c\
+			printf/ft_putchar_pf.c\
+			printf/ft_puthexa.c\
+			printf/ft_putnbr_pf.c\
+			printf/ft_putptr_pf.c\
+			printf/ft_putstr_pf.c\
 
 OBJS	= ${SRCS:.c=.o}
-
-SRCS_BONUS	=	ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c ft_lstadd_back.c\
-				ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c
-
-OBJS_BONUS	= ${SRCS_BONUS:.c=.o}
 
 NAME	= libft.a
 
@@ -21,22 +77,19 @@ CC	= gcc
 
 CFLAGS	= -Wall -Wextra -Werror
 
-RM	= rm -f
+RM	= rm -rf
 
 
-%.o:	%.c libft.h
+%.o:	%.c libft.h 
 	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 ${NAME}:	${OBJS}
-		ar rc ${NAME} ${OBJS}
+	ar rc ${NAME} ${OBJS}
 
-all:		${NAME}
-
-bonus: ${OBJS} ${OBJS_BONUS}
-		ar rc ${NAME} ${OBJS} ${OBJS_BONUS} 
+all:	${NAME}
 
 clean:
-		${RM} ${OBJS} ${OBJS_BONUS}
+		${RM} */*.o
 
 fclean:		clean
 		${RM} ${NAME}

@@ -1,55 +1,76 @@
+# Nom de l'exécutable
 NAME = fdf
 
+# Fichiers d'en-tête
+INC = includes/fdf.h
+
+INCFLAGS = -I includes
+
+# Bibliothèque
+LIB = libft/libft.a minilibx-linux/libmlx_Linux.a minilibx-linux/libmlx.a 
+
+LDFLAGS = -Llibft -lft -Lminilibx-linux -lmlx_Linux -lX11 -lXext -lm -lmlx
+
+# Compilateur
 CC = gcc
 
-FLAGS = -Wall -Wextra -Werror 
+# Options de compilation
+CFLAGS = -Wall -Wextra -Werror -O3 $(INC)
 
-LIB	= libft/libft.a
+# Répertoires source
+SRCDIR = srcs
+OBJDIR = objs
 
-SRCS = 	srcs/main.c\
-		srcs/colors/color.c\
-		srcs/hooks/hook_funct.c\
-		srcs/hooks/hook_management.c\
-		srcs/map/center_map.c\
-		srcs/map/file_to_charmap.c\
-		srcs/map/get_map.c\
-		srcs/render_img/apply_rotation.c\
-		srcs/render_img/apply_transformations.c\
-		srcs/render_img/plot_lines_in_img.c\
-		srcs/render_img/render_img.c\
-		srcs/utils/closing_utils.c\
-		srcs/utils/error_utils.c\
-		srcs/utils/free_utils.c\
-		srcs/utils/length_utils.c\
-		srcs/utils/projection_utils.c\
+# Liste des fichiers source
+SRCS =	main.c \
+		colors/color.c \
+		hooks/hook_funct.c \
+		hooks/hook_management.c \
+		map/center_map.c \
+		map/file_to_charmap.c \
+		map/get_map.c \
+		render_img/apply_rotation.c \
+		render_img/apply_transformations.c \
+		render_img/plot_lines_in_img.c \
+		render_img/render_img.c \
+		utils/closing_utils.c \
+		utils/error_utils.c \
+		utils/free_utils.c \
+		utils/length_utils.c \
+		utils/projection_utils.c
+
+# Chemin complet des fichiers source et objets
+SRCFILES = $(addprefix $(SRCDIR)/,$(SRCS))
+OBJFILES = $(patsubst %.c,$(OBJDIR)/%.o,$(SRCS))
 
 
-OBJS = $(patsubst srcs/%.c,objs/%.o,$(SRCS))
-
-
-$(NAME) : $(OBJS) $(LIB) includes/fdf.h
-	make -C minilibx-test/
-	$(CC) $(FLAGS) $(OBJS) -I includes/ -Llibft -lft -Lminilibx-test/ -lmlx_Linux -o $(NAME) -lX11 -lXext -lm -lmlx
-
-objs/%.o : srcs/%.c
+# Règles de construction des objets
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(INC)
 	mkdir -p $(dir $@)
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(DEPFLAGS) -c $< -o $@
 
-$(LIB) :	force
+# Règles de construction de l'executable
+$(NAME): $(OBJFILES) $(LIB) $(INC)
+	$(CC) $(CFLAGS) $(OBJFILES) $(INCLUDES) $(LDFLAGS) -o $(NAME)
+
+
+$(LIB): force
 	make -C libft
+	make -C minilibx-linux
 
-force :
+# Règles supplémentaires
+force:
 
-all : $(NAME)
+all: $(NAME)
 
-clean :
-	rm -rf objs/
-	make -C libft/ clean
+clean:
+	rm -rf $(OBJDIR)
+	make -C libft clean
 
-fclean : clean
+fclean: clean
 	rm -f $(NAME)
-	make -C libft/ fclean
+	make -C libft fclean
 
-re : fclean all
+re: fclean all
 
-.PHONY : clean fclean re all test force
+.PHONY: all clean fclean re force
